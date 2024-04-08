@@ -1,8 +1,7 @@
 const mongoose = require("..")
-const { USER } = require("../../constant/dbContants")
+const { USER, COMMENTS } = require("../../constant/dbContants")
 
 const commmentSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: USER,
@@ -35,3 +34,6 @@ const commmentSchema = new mongoose.Schema({
         required: false,
     },
 })
+
+const Comment = mongoose.model(COMMENTS, commmentSchema);
+module.exports = Comment;

@@ -2,7 +2,6 @@ const mongoose = require("..");
 const { DB_COURSE: COURSE, DB_COMMENTS: COMMENTS } = require("../../constant/dbContants");
 
 const courseSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     title: {
         type: String,
         required: true,

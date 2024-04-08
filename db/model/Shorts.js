@@ -2,7 +2,6 @@ const mongoose = require("..");
 const { USER, COMMENTS, SHORTS } = require("../../constant/dbContants");
 
 const shortsSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: USER,

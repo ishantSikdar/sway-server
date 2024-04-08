@@ -1,13 +1,11 @@
 const jwt = require('jsonwebtoken');
-const accountServices = require('../service/user/account');
-
-const JWT_SECRET = process.env.JWT_SECRET;
+const accountServices = require('../service/user/accountServices');
 
 exports.signup = async (req, res) => {
     try {
         await accountServices.signUp(req);
         return res.status(200).json({
-            message: `New User Added Successfully`
+            message: `New Account Registered`
         })
 
     } catch (error) {
@@ -19,9 +17,9 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
     try {
-
+        const token = await accountServices.signIn(req);
         return res.status(200).json({
-            auth: `Bearer ${token}`
+            auth: token
         })
 
     } catch (error) {

@@ -2,7 +2,6 @@ const mongoose = require("..")
 const { DB_USER: USER, DB_COMMUNITY: COMMUNITY } = require("../../constant/dbContants")
 
 const communitySchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     communityName: {
         type: String,
         required: true,

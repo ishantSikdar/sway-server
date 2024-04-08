@@ -1,8 +1,7 @@
-const mongoose = require("..");
+const mongoose = require("../index");
 const { COURSE, USER } = require("../../constant/dbContants");
 
 const userSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
         required: true,

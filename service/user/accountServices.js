@@ -1,26 +1,38 @@
-const jwt = require('jsonwebtoken')
-const User = require("../../db/model/User");
+    const jwt = require('jsonwebtoken')
+    const User = require("../../db/model/User");
+    const bcrypt = require('bcryptjs');
 
-exports.signUp = async (req) => {
-    const newUser = new User({
-        name: req.body.name,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        mobile: req.body.mobile,
-    })
+    const JWT_SECRET = process.env.JWT_SECRET;
 
-    await newUser.save();
-}
+    exports.signUp = async (req) => {
+        const newUser = new User({
+            name: req.body.name,
+            username: req.body.username,
+            email: req.body.email,
+            password: await bcrypt.hash(req.body.password, 10),
+            mobile: req.body.mobile,
+        })
 
-exports.signIn = async (req) => {
-    const reqUsername = req.body.username;
-    const reqPassword = req.body.password;
+        await newUser.save()
+            .then(() => {
+                console.log("Saved SuccessFully");
+            })
+            .catch((err) => {
+                console.log(`Server error: ${err.message}`)
+            });
+    }
 
-    const user = User.find({
-        username: reqUsername,
-        password: reqPassword,
-    })
+    exports.signIn = async (req) => {
+        const user = await User.find({ username: req.body.username });
 
-    return jwt.sign(user.username, JWT_SECRET)
-}
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const isPasswordValid = await bcrypt.compare(user.password, req.body.password);
+        if (!isPasswordValid) {
+            throw new Error('Invalid username or password');
+        }
+
+        return jwt.sign({ username: user.username }, JWT_SECRET);
+    }
