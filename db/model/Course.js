@@ -1,5 +1,5 @@
 const mongoose = require("..");
-const { COURSE } = require("../../constant/dbContants");
+const { COURSE, COMMENTS } = require("../../constant/dbContants");
 
 const courseSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -39,11 +39,34 @@ const courseSchema = new mongoose.Schema({
                     type: String,
                     required: true,
                 },
+                interaction: {
+                    rating: {
+                        type: Number,
+                        default: 0,
+                        required: true,
+                    }, 
+                    comments: [{
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: COMMENTS,
+                    }],
+                },
             }]
         }]
     },
+    interaction: {
+        rating: {
+            type: Number,
+            default: 0,
+            required: true,
+        }, 
+        reviews: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: COMMENTS,
+        }],
+    },
     createdAt: {
         type: Date,
+        default: Date.now,
         required: true,
     },
     updatedAt: {
