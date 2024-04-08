@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DATABASE = process.env.DATABASE;
+const DATABASE = process.env.DATABASE || 'sway';
 const USERNAME = process.env.USERNAME;
 const PASSWORD = process.env.PASSWORD;
 const HOSTNAME = process.env.HOSTNAME;

@@ -6,9 +6,9 @@ app.use(express.json())
 app.use('/user', userRoute);
 
 app.use((error, data, req, res) => {
-    console.error(`Error occured: ${err}`)
+    console.error(`Error occured: ${error}`)
     res.status(500).json({
-        message: `Some error occured: ${err.message}`
+        message: `Some error occured: ${error.message}`
     })
 })
 
