@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    mobile: {
+        type: String,
+        unique: true,
+        required: true,
+    },
     interests: [{
         type: String,
         required: false,
@@ -39,11 +44,6 @@ const userSchema = new mongoose.Schema({
             grade: String,
             breaks: Number,
         }
-    },
-    mobile: {
-        type: String,
-        unique: true,
-        required: true,
     },
     lastLoginAt: {
         type: Date,
