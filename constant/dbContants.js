@@ -1,8 +1,9 @@
 module.exports = {
     // model names
-    COURSE: "course",
-    USER: "user",
-    MESSAGE: "message",
-    SHORTS: "shorts",
-    COMMENTS: "comments"
+    DB_COURSE: "course",
+    DB_USER: "user",
+    DB_MESSAGE: "message",
+    DB_SHORTS: "shorts",
+    DB_COMMENTS: "comments",
+    DB_COMMUNITY: "COMMUNITY",
 };
