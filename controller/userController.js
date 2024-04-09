@@ -8,21 +8,21 @@ exports.signup = async (req, res) => {
     try {
         await accountServices.signUp(req);
         const apiResponse = new ApiResponse(`New account registered`)
-        logger.info(API_REQ_LOG(apiResponse.requestId, `Success`, `Sign Up operation successful`));
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `Sign Up operation successful`));
         return res.status(200).json(apiResponse);
 
     } catch (error) {
-        logger.error(`Error Registering New User of Email: ${req.body.email}, Cause: ${error.message}`);
+        const CAUSE = `Error Registering New User of Email: ${req.body.email}, Cause: ${error.message}`;
 
         if (req.status === 409) {
-            return res.status(req.status).json(
-                new ApiResponse(`User already exists`)
-            );
+            const apiResponse = new ApiResponse(`User already exists`)
+            logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, CAUSE));
+            return res.status(req.status).json(apiResponse);
         }
 
-        return res.status(500).json(
-            new ApiResponse(`Failed to register new user`)
-        );
+        const apiResponse = new ApiResponse(`Failed to register new user`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, CAUSE));
+        return res.status(500).json(apiResponse);
     }
 }
 
@@ -30,27 +30,26 @@ exports.signin = async (req, res) => {
     try {
         const token = await accountServices.signIn(req);
         const apiResponse = new ApiResponse(`Signin Successful`, { authToken: token });
-        logger.info(API_REQ_LOG(apiResponse.requestId, `Success`, `Sign In operation successful`));
-
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `Sign In operation successful`));
         return res.status(200).json(apiResponse);
 
     } catch (error) {
-        logger.error(`Error Signing in user of username: ${req.body.username}, Cause: ${error.message}`)
+        const cause = `Error Signing in user of username: ${req.body.username}, Cause: ${error.message}`;
 
         if (req.status === 404) {
-            return res.status(req.status).json(
-                new ApiResponse(`User not found`)
-            );
+            const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+            return res.status(req.status).json(apiResponse);
         }
 
         if (req.status === 401) {
-            return res.status(req.status).json(
-                new ApiResponse(`Invalid username or password`)
-            );
+            const apiResponse = new ApiResponse(`Invalid username or password`)
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+            return res.status(req.status).json(apiResponse);
         }
 
-        return res.status(500).json(
-            new ApiResponse(`Error occured during login`)
-        );
+        const apiResponse = new ApiResponse(`Error occured during login`)
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+        return res.status(500).json(apiResponse);
     }
 }
