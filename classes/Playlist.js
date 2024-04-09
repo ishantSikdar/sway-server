@@ -9,3 +9,5 @@ class Playlist {
         this.topics = topics || [];
     }
 }
+
+module.exports = Playlist;
