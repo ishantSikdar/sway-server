@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { logger } = require("../config/logger");
 
 const DATABASE = process.env.DATABASE || 'sway';
 const USERNAME = process.env.USER;
@@ -8,10 +9,10 @@ const HOSTNAME = process.env.HOSTNAME;
 mongoose
     .connect(`mongodb+srv://${USERNAME}:${PASSWORD}@${HOSTNAME}/${DATABASE}`)
     .then(() => {
-        console.log(`Connected to MongoDB Cluster Database: ${DATABASE}`);
+        logger.info(`Connected to MongoDB Cluster Database: ${DATABASE}`);
     })
     .catch((error) => {
-        console.error(
+        logger.error(
             `Connection failed to MongoDB Cluster Database: ${DATABASE}, Cause: ${error.message}`
         );
     });

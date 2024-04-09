@@ -1,20 +1,21 @@
 const express = require('express');
-const userRoute = require("./route/userRoutes")
+const { logger } = require('./config/logger');
+const userRoute = require("./route/userRoutes");
 
 const PORT = process.env.PORT || 3000;
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(express.json());
 
 app.use('/user', userRoute);
 
 app.use((error, data, req, res) => {
-    console.error(`Error occured: ${error}`)
+    logger.error(`Error occured: ${error}`);
     res.status(500).json({
         message: `Some error occured: ${error.message}`
     })
 })
 
 app.listen(PORT, () => {
-    console.log(`App listening to PORT ${PORT}`)
+    logger.info(`App listening to PORT ${PORT}`);
 })

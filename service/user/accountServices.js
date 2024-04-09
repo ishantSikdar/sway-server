@@ -1,10 +1,24 @@
 const jwt = require('jsonwebtoken')
-const User = require("../../db/model/User");
 const bcrypt = require('bcryptjs');
+const { logger } = require('../../config/logger')
+const User = require("../../db/model/User");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.signUp = async (req) => {
+    const existingUser = await User.findOne({
+        $or: [
+            { username: req.body.username },
+            { email: req.body.email },
+            { mobile: req.body.mobile }
+        ]
+    });
+
+    if (existingUser) {
+        req.status = 409;
+        throw new Error('User already exists');
+    }
+
     const newUser = new User({
         name: req.body.name,
         username: req.body.username,
@@ -13,25 +27,23 @@ exports.signUp = async (req) => {
         mobile: req.body.mobile,
     })
 
-    await newUser.save()
-        .then(() => {
-            console.log("User Saved SuccessFully");
-        })
-        .catch((err) => {
-            console.log(`Server error: ${err.message}`)
-        });
+    const user = await newUser.save();
+    logger.info(`User ${user._id} Registered`);
 }
 
 exports.signIn = async (req) => {
-    const user = await User.find({ username: req.body.username });
+    const user = await User.findOne({ username: req.body.username });
 
     if (!user) {
+        req.status = 404;
         throw new Error('User not found');
     }
 
-    const isPasswordValid = await bcrypt.compare(user.password, req.body.password);
+    const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
+
     if (!isPasswordValid) {
-        throw new Error('Invalid username or password');
+        req.status = 401;
+        throw new Error('Invalid Username or Password');
     }
 
     return jwt.sign({ username: user.username }, JWT_SECRET);
