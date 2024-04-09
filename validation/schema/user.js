@@ -16,6 +16,13 @@ exports.signUpSchema = zod.object({
 })
 
 exports.signInSchema = zod.object({
-    username: usernameSchema,
+    username: zod.union([
+        emailSchema,
+        mobileNumberSchema,
+        usernameSchema,
+    ]).optional().refine(value => value !== undefined, {
+        message: "Username is required",
+        path: ["username"],
+    }),
     password: passwordSchema,
-})
+});

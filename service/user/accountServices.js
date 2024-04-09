@@ -32,7 +32,13 @@ exports.signUp = async (req) => {
 }
 
 exports.signIn = async (req) => {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({
+        $or: [
+            { username: req.body.username },
+            { email: req.body.username },
+            { mobile: req.body.username }
+        ]
+    });
 
     if (!user) {
         req.status = 404;
