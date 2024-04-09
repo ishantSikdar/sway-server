@@ -5,5 +5,5 @@ module.exports = {
     MESSAGE: "message",
     SHORTS: "shorts",
     COMMENTS: "comments",
-    COMMUNITY: "COMMUNITY",
+    COMMUNITY: "Community",
 };

@@ -1,4 +1,5 @@
-const { generateHttpRequestId } = require("../util/IDUtil");
+const { getCurrentDateInIST } = require("../util/dateUtil");
+const { generateHttpRequestId } = require("../util/idUtil");
 
 class ApiResponse {
     constructor(
@@ -6,10 +7,10 @@ class ApiResponse {
         data,
     ) {
         this.requestId = generateHttpRequestId();
-        this.timestamp = Date.now;
+        this.timestamp = getCurrentDateInIST();
         this.message = message;
         this.data = data;
     }
 }
 
-module.exports = ApiResponse;
+module.exports = { ApiResponse };

@@ -9,7 +9,7 @@ const messageSchema = new mongoose.Schema({
     }, 
     time: {
         type: Date,
-        default: Date.now,
+        default: Date.now(),
         required: true,
     },
     content: {
@@ -26,7 +26,7 @@ const messageSchema = new mongoose.Schema({
     }, 
     createdAt: {
         type: Date,
-        default: Date.now,
+        default: Date.now(),
         required: true,
     },
     updatedAt: {
