@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const accountServices = require('../service/user/accountServices');
 const { logger } = require('../config/logger');
 const { ApiResponse } = require('../classes/ApiResponse');
@@ -12,16 +11,16 @@ exports.signup = async (req, res) => {
         return res.status(200).json(apiResponse);
 
     } catch (error) {
-        const CAUSE = `Error Registering New User of Email: ${req.body.email}, Cause: ${error.message}`;
+        const cause = `Error Registering New User of Email: ${req.body.email}, Cause: ${error.message}`;
 
         if (req.status === 409) {
             const apiResponse = new ApiResponse(`User already exists`)
-            logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, CAUSE));
+            logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
             return res.status(req.status).json(apiResponse);
         }
 
         const apiResponse = new ApiResponse(`Failed to register new user`);
-        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, CAUSE));
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
         return res.status(500).json(apiResponse);
     }
 }
