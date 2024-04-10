@@ -1,4 +1,4 @@
-const accountServices = require('../service/user/accountServices');
+const accountServices = require('../service/accountServices');
 const { logger } = require('../config/logger');
 const { ApiResponse } = require('../classes/ApiResponse');
 const { API_REQ_LOG } = require('../constant/logConstants');
@@ -7,7 +7,7 @@ exports.signupRoute = async (req, res) => {
     try {
         await accountServices.signUp(req);
         const apiResponse = new ApiResponse(`New account registered`)
-        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `Sign Up operation successful`));
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `Sign Up operation successful`, req.url));
         return res.status(200).json(apiResponse);
 
     } catch (error) {
@@ -15,12 +15,12 @@ exports.signupRoute = async (req, res) => {
 
         if (req.status === 409) {
             const apiResponse = new ApiResponse(`User already exists`)
-            logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+            logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
 
         const apiResponse = new ApiResponse(`Failed to register new user`);
-        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     }
 }
@@ -29,7 +29,7 @@ exports.signinRoute = async (req, res) => {
     try {
         const token = await accountServices.signIn(req);
         const apiResponse = new ApiResponse(`Signin Successful`, { authToken: token });
-        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `Sign In operation successful`));
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `Sign In operation successful`, req.url));
         return res.status(200).json(apiResponse);
 
     } catch (error) {
@@ -37,18 +37,18 @@ exports.signinRoute = async (req, res) => {
 
         if (req.status === 404) {
             const apiResponse = new ApiResponse(`User not found`);
-            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
 
         if (req.status === 401) {
             const apiResponse = new ApiResponse(`Invalid username or password`)
-            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
 
         const apiResponse = new ApiResponse(`Error occured during login`)
-        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause));
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     }
 }

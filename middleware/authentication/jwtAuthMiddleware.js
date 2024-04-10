@@ -9,7 +9,7 @@ exports.userAuthMiddleware = async (req, res, next) => {
 
     if (!authToken) {
         const apiResponse = new ApiResponse(`Authorization token is missing`);
-        logger.info(API_REQ_LOG(apiResponse.requestId, 'FAILED', apiResponse.message))
+        logger.info(API_REQ_LOG(apiResponse.requestId, 'FAILED', apiResponse.message, req.url))
         return res.status(401).json(apiResponse);
     }
 
@@ -23,13 +23,13 @@ exports.userAuthMiddleware = async (req, res, next) => {
 
         } else {
             const apiResponse = new ApiResponse(`Invalid authorization token, no username found`);
-            logger.info(API_REQ_LOG(apiResponse.requestId, 'FAILED', apiResponse.message))
+            logger.info(API_REQ_LOG(apiResponse.requestId, 'FAILED', apiResponse.message, req.url))
             return res.status(403).json(apiResponse);
         }
 
     } catch (error) {
         const apiResponse = new ApiResponse(`Invalid authorization token`);
-        logger.info(API_REQ_LOG(apiResponse.requestId, 'FAILED', apiResponse.message))
+        logger.info(API_REQ_LOG(apiResponse.requestId, 'FAILED', apiResponse.message, req.url))
         return res.status(403).json(apiResponse);
 
     }

@@ -1,0 +1,3 @@
+exports.processTopicGeneration = async (req) => {
+    
+}
