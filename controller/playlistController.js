@@ -1,3 +1,9 @@
 const { ApiResponse } = require("../classes/ApiResponse");
 const { API_REQ_LOG } = require("../constant/logConstants");
-const { processTopicGeneration } = require("../service/playlistServices");
+import { getAllSubjects } from "../service/playlistServices";
+
+exports.getSubjectsList = async (req, res) => {
+    if (!req.searchTag) {
+        const allSubjects = await getAllSubjects(req);
+    }
+}

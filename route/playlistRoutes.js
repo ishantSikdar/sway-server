@@ -1,8 +1,7 @@
-const { Router } = require('express');
-const { API_URI_GENERATE_TOPICS } = require('../constant/endpoints');
-const { generateTopicsRoute } = require('../controller/playlistController');
+import { Router } from 'express';
+import { API_URI_SUBJECTS } from '../constant/endpoints';
 const router = Router();
 
-router.post(API_URI_GENERATE_TOPICS, generateTopicsRoute);
+router.post(API_URI_SUBJECTS, );
 
 module.exports = router;
