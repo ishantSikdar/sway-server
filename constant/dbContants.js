@@ -6,4 +6,5 @@ module.exports = {
     SHORTS: "shorts",
     COMMENTS: "comments",
     COMMUNITY: "Community",
+    PLAYLIST: "playlist",
 };

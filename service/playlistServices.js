@@ -1,3 +1,0 @@
-exports.processTopicGeneration = async (req) => {
-    
-}

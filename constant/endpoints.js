@@ -4,7 +4,10 @@ module.exports = {
 
     API_URI_SIGNUP: "/signup",
     API_URI_SIGNIN: "/signin",
-    API_URI_GENERATE_TOPICS: "/generateTopics",
+
+    // Playlist
+    API_URI_SUBJECTS: "/subjects",
+    API_URI_SUBJECT: "/subject",
 
     // Courses
     API_URI_COURSES: "/courses",
