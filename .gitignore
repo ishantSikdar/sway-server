@@ -48,3 +48,4 @@ coverage/
 # Yarn configuration
 .yarnrc
 yarn-error.log
+.vercel
