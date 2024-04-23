@@ -1,4 +1,15 @@
 {
+  "name": "sway-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
@@ -12,9 +23,5 @@
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^5.0.0",
     "zod": "^3.22.4"
-  },
-  "scripts": {
-    "start": "node index.js",
-    "test" : "echo \"Error: no test specified\" && exit 1"
   }
 }
