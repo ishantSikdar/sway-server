@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { API_URI_COURSE, API_URI_COURSES } from "../constant/endpoints";
-import { getCourseRoute, getCoursesRoute, updateCourseRoute } from "../controller/courseController";
+const { Router } = require("express");
+const { API_URI_COURSE, API_URI_COURSES } = require("../constant/endpoints");
+const { getCourseRoute, getCoursesRoute, updateCourseRoute } = require("../controller/courseController");
 const router = Router();
 
 router.get(API_URI_COURSES, getCoursesRoute); // get all courses

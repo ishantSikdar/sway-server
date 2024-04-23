@@ -1,4 +1,4 @@
-import Playlist from "../db/model/Playlist";
+const Playlist = require("../db/model/Playlist");
 
 exports.getAllSubjects = async (req) => {
     const allSubjects = await Playlist.find();

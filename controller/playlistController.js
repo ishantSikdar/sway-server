@@ -1,7 +1,7 @@
-import { ApiResponse } from "../classes/ApiResponse";
-import { logger } from "../config/logger";
-import { API_REQ_LOG } from "../constant/logConstants";
-import { getAllSubjects } from "../service/playlistServices";
+const { ApiResponse } = require("../classes/ApiResponse");
+const { logger } = require("../config/logger");
+const { API_REQ_LOG } = require("../constant/logConstants");
+const { getAllSubjects } = require("../service/playlistServices");
 
 
 exports.getSubjectsListRoute = async (req, res) => {

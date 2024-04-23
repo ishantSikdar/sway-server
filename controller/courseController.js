@@ -1,7 +1,7 @@
-import { ApiResponse } from "../classes/ApiResponse";
-import { getAllCourses, getCourseInfo, updateCourseDetails } from "../service/courseServices";
-import { logger } from "../config/logger";
-import { API_REQ_LOG } from "../constant/logConstants";
+const { ApiResponse } = require("../classes/ApiResponse");
+const { getAllCourses, getCourseInfo, updateCourseDetails } = require("../service/courseServices");
+const { logger } = require("../config/logger");
+const { API_REQ_LOG } = require("../constant/logConstants");
 
 
 exports.getCoursesRoute = async (req, res) => {

@@ -1,5 +1,5 @@
-import { logger } from "../config/logger";
-import Course from "../db/model/Course";
+const { logger } = require("../config/logger");
+const Course = require("../db/model/Course");
 
 exports.getAllCourses = async (req) => {
     const courses = await Course.find();

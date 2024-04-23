@@ -1,5 +1,6 @@
 const express = require('express');
 const { logger } = require('./config/logger');
+require('dotenv').config();
 const userRoute = require("./route/userRoutes");
 const playlistRoute = require("./route/playlistRoutes");
 const { ROOT_URI_USER, ROOT_URI_PLAYLIST } = require('./constant/endpoints');

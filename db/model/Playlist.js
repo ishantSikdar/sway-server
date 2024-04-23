@@ -1,5 +1,5 @@
-import mongoose from "..";
-import { PLAYLIST } from "../../constant/dbContants";
+const mongoose = require("..");
+const { PLAYLIST } = require("../../constant/dbContants");
 
 const playlistSchema = new mongoose.Schema({
     subject: {

@@ -15,6 +15,7 @@ mongoose
         logger.error(
             `Connection failed to MongoDB Cluster Database: ${DATABASE}, Cause: ${error.message}`
         );
+        logger.debug(`${USERNAME} : ${PASSWORD}`);
     });
 
 module.exports = mongoose;
