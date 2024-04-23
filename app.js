@@ -13,6 +13,11 @@ app.use(express.json());
 app.use(ROOT_URI_USER, userRoute);
 app.use(ROOT_URI_PLAYLIST, playlistRoute);
 
+app.get("/helloWorld", (req, res) => {
+    logger.info("Health Checkup Called");
+    res.send("Hello World");
+})
+
 app.use((error, data, req, res) => {
     logger.error(`Error occured: ${error}`);
     res.status(500).json({
