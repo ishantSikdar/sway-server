@@ -1,3 +1,4 @@
+/*
 const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
 
@@ -19,3 +20,16 @@ exports.logger = winston.createLogger({
         })
     ]
 });
+
+*/
+
+
+// Logger configuration
+const logger = {
+    error: (...args) => console.error(...args),
+    warn: (...args) => console.warn(...args),
+    info: (...args) => console.info(...args),
+    debug: (...args) => console.log(...args)
+};
+
+module.exports = { logger };
