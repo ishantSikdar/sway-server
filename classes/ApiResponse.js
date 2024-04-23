@@ -1,5 +1,5 @@
 const { getCurrentDateInIST } = require("../util/dateUtil");
-const { generateHttpRequestId } = require("../util/idUtil");
+const { generateHttpRequestId } = require("../util/IDUtil");
 
 class ApiResponse {
     constructor(
