@@ -1,4 +1,6 @@
 /*
+Winston Logger Configuration (Commented because App is deployed to Vercel, that supports Serveless Fns, Winston creates directories and files on server, that is not possible for Servless Fns)
+
 const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
 

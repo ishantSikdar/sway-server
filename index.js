@@ -4,6 +4,7 @@ require('dotenv').config();
 const userRoute = require("./route/userRoutes");
 const playlistRoute = require("./route/playlistRoutes");
 const { ROOT_URI_USER, ROOT_URI_PLAYLIST } = require('./constant/endpoints');
+const { userAuthMiddleware } = require('./middleware/authentication/jwtAuthMiddleware');
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,6 +17,11 @@ app.use(ROOT_URI_PLAYLIST, playlistRoute);
 app.get("/helloWorld", (req, res) => {
     logger.info("Health Checkup Called");
     res.send("Hello World");
+})
+
+app.get("/helloAuth", userAuthMiddleware, (req, res) => {
+    logger.info("User Auth Checkup Called");
+    res.send("User Auth Alive");
 })
 
 app.use((error, data, req, res) => {
