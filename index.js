@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { logger } = require('./config/logger');
 require('dotenv').config();
 const userRoute = require("./route/userRoutes");
@@ -10,6 +11,10 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
 
 app.use(ROOT_URI_USER, userRoute);
 app.use(ROOT_URI_PLAYLIST, playlistRoute);

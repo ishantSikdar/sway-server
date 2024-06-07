@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    photo: {
+        type: String,
+        require: false,
+    },
     interests: [{
         type: String,
         required: false,
