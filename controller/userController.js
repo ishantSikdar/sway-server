@@ -14,7 +14,7 @@ exports.signupRoute = async (req, res) => {
         const cause = `Error Registering New User of Email: ${req.body.email}, Cause: ${error.message}`;
 
         if (req.status === 409) {
-            const apiResponse = new ApiResponse(`User already exists`)
+            const apiResponse = new ApiResponse(`User already exists`);
             logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
@@ -42,13 +42,36 @@ exports.signinRoute = async (req, res) => {
         }
 
         if (req.status === 401) {
-            const apiResponse = new ApiResponse(`Invalid username or password`)
+            const apiResponse = new ApiResponse(`Invalid username or password`);
             logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
 
-        const apiResponse = new ApiResponse(`Error occured during login`)
+        const apiResponse = new ApiResponse(`Error occured during login`);
         logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
+    }
+}
+
+exports.userDetailsRoute = async (req, res) => {
+    try {
+        const user = await accountServices.getUserDetails(req.username);
+        const apiResponse = new ApiResponse(`Fetched User Details`, { loggedInUser: user });
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Details fetched successfully`, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch(error) {
+        const cause = `Error fetching user details of username: ${req.username}, Cause: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Error occured fetching User Details`);
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+
     }
 }

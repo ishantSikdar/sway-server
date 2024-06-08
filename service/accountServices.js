@@ -54,3 +54,24 @@ exports.signIn = async (req) => {
 
     return jwt.sign({ username: user.username }, JWT_SECRET);
 }
+
+exports.getUserDetails = async (username) => {
+    const user = await User.findOne({
+        username: username
+    });
+
+    if (!user) {
+        req.status = 404;
+        throw new Error('User not found');
+        
+    } else {
+        return {
+            username: user.username,
+            name: user.name,
+            email: user.email,
+            mobile: user.mobile,
+            interests: user.interests,
+            enrolled: user.coursesEnrolled,
+        };
+    }
+}

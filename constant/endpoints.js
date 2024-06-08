@@ -12,4 +12,7 @@ module.exports = {
     // Courses
     API_URI_COURSES: "/courses",
     API_URI_COURSE: "/course", 
+
+    // User
+    API_URI_USER_DETAILS: "/userDetails",
 }
