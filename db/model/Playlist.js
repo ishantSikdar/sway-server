@@ -7,10 +7,12 @@ const playlistSchema = new mongoose.Schema({
         required: true,
     },
     topics: [{
-        topicName: {
-            type: String,
-        },
+        type: String,
     }],
+    thumbnail: {
+        type: String,
+        required: false,
+    },
     createdAt: {
         type: Date,
         default: Date.now(),
@@ -27,4 +29,4 @@ const playlistSchema = new mongoose.Schema({
 })
 
 const Playlist = mongoose.model(PLAYLIST, playlistSchema);
-exports.default = Playlist;
+module.exports = Playlist;
