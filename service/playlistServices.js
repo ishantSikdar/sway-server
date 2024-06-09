@@ -1,4 +1,7 @@
+const { YT_ROOT_URL: YT_BASE_URL } = require("../constant/endpoints");
 const Playlist = require("../db/model/Playlist");
+const YT_KEY = process.env.YT_API_KEY;
+const axios = require('axios');
 
 exports.getAllSubjects = async (req) => {
     const allSubjects = await Playlist.find();
@@ -40,4 +43,9 @@ exports.getSubjectById = async (subjectId) => {
         thumbnailUrl: subject.thumbnail,
         topics: subject.topics,
     };
+}
+
+exports.getYoutubeVideosByTitle = async (title) => {
+    const videoDataResponse = await axios.get(`${YT_BASE_URL}/search?key=${YT_KEY}&q=${title}&safeSearch=strict&type=video&videoEmbeddable=true&part=snippet&videoDuration=medium`);
+    return videoDataResponse.data;
 }
