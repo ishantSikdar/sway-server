@@ -1,5 +1,5 @@
 const mongoose = require("..");
-const { DB_COURSE: COURSE, DB_COMMENTS: COMMENTS } = require("../../constant/dbContants");
+const { COURSE, COMMENTS } = require("../../constant/dbContants");
 
 const courseSchema = new mongoose.Schema({
     title: {

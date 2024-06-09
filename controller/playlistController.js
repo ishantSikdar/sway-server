@@ -1,13 +1,13 @@
 const { ApiResponse } = require("../classes/ApiResponse");
 const { logger } = require("../config/logger");
 const { API_REQ_LOG } = require("../constant/logConstants");
-const { getAllSubjects } = require("../service/playlistServices");
+const { getSubjectsByName, getSubjectById } = require("../service/playlistServices");
 
 
 exports.getSubjectsListRoute = async (req, res) => {
     try {
-        const courses = await getAllSubjects(req);
-        const apiResponse = new ApiResponse(`Subjects List Retreived`, courses);
+        const subjects = await getSubjectsByName(req.query.searchTag);
+        const apiResponse = new ApiResponse(`Subjects List Retreived`, subjects);
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
         return res.status(200).json(apiResponse);
 
@@ -19,10 +19,10 @@ exports.getSubjectsListRoute = async (req, res) => {
     }
 }
 
-exports.getSubjectDetailsRoute = async (req, res) => {
+exports.getSubjectByIdRoute = async (req, res) => {
     try {
-        const courses = await (req);
-        const apiResponse = new ApiResponse(`Subject Retreived`, courses);
+        const subject = await getSubjectById(req.query.subjectId);
+        const apiResponse = new ApiResponse(`Subjects Retreived`, subject);
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
         return res.status(200).json(apiResponse);
 
