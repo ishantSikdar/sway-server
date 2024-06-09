@@ -47,5 +47,5 @@ exports.getSubjectById = async (subjectId) => {
 
 exports.getYoutubeVideosByTitle = async (title) => {
     const videoDataResponse = await axios.get(`${YT_BASE_URL}/search?key=${YT_KEY}&q=${title}&safeSearch=strict&type=video&videoEmbeddable=true&part=snippet&videoDuration=medium`);
-    return videoDataResponse.data;
+    return videoDataResponse.data.items;
 }
