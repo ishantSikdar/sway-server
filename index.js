@@ -13,7 +13,10 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: [
+        "http://localhost:5173",
+        "https://sway-react.vercel.app",
+    ]
 }));
 
 app.use(ROOT_URI_USER, userRoute);
