@@ -55,13 +55,13 @@ exports.signinRoute = async (req, res) => {
 
 exports.userDetailsRoute = async (req, res) => {
     try {
-        const user = await accountServices.getUserDetails(req.username);
+        const user = await accountServices.getUserDetails(req);
         const apiResponse = new ApiResponse(`Fetched User Details`, { loggedInUser: user });
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Details fetched successfully`, req.url));
         return res.status(200).json(apiResponse);
 
     } catch(error) {
-        const cause = `Error fetching user details of username: ${req.username}, Cause: ${error.message}`;
+        const cause = `Error fetching user details of username: ${req.userId}, Cause: ${error.message}`;
 
         if (req.status === 404) {
             const apiResponse = new ApiResponse(`User not found`);
@@ -70,6 +70,29 @@ exports.userDetailsRoute = async (req, res) => {
         }
 
         const apiResponse = new ApiResponse(`Error occured fetching User Details`);
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+
+    }
+}
+
+exports.editUserDetailsRoute = async (req, res) => {
+    try {
+        await accountServices.editUserDetails(req);
+        const apiResponse = new ApiResponse(`Edited User Details`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Details edited successfully`, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch(error) {
+        const cause = `Error editing user details of username: ${req.userId}, Cause: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Error occured editing User Details`);
         logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
 

@@ -53,18 +53,16 @@ exports.signIn = async (req) => {
         throw new Error('Invalid Username or Password');
     }
 
-    return jwt.sign({ username: user.username }, JWT_SECRET);
+    return jwt.sign({ userId: user._id }, JWT_SECRET);
 }
 
-exports.getUserDetails = async (username) => {
-    const user = await User.findOne({
-        username: username
-    });
+exports.getUserDetails = async (req) => {
+    const user = await User.findById(req.userId);
 
     if (!user) {
         req.status = 404;
         throw new Error('User not found');
-        
+
     } else {
         return {
             username: user.username,
@@ -75,5 +73,23 @@ exports.getUserDetails = async (username) => {
             enrolled: user.coursesEnrolled,
             joined: formatDateToEng(user.createdAt),
         };
+    }
+}
+
+exports.editUserDetails = async (req) => {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+        req.status = 404;
+        throw new Error('User not found');
+
+    } else {
+        const newUser = req.body;
+        for (const key in newUser) {
+            if (newUser[key] !== undefined && newUser[key] !== "") {
+                user[key] = newUser[key];
+            }
+        }
+        await user.save();
     }
 }

@@ -16,9 +16,8 @@ exports.userAuthMiddleware = async (req, res, next) => {
     try {
         const [, jwtToken] = authToken.split(" ");
         const decodedValue = jwt.verify(jwtToken, JWT_SECRET);
-
-        if (decodedValue.username) {
-            req.username = decodedValue.username;
+        if (decodedValue.userId) {
+            req.userId = decodedValue.userId;
             next();
 
         } else {
