@@ -85,6 +85,7 @@ exports.editUserDetails = async (req) => {
 
     } else {
         const newUser = req.body;
+        console.log(newUser);
         for (const key in newUser) {
             if (newUser[key] !== undefined && newUser[key] !== "") {
                 user[key] = newUser[key];
