@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { logger } = require('../config/logger')
+const { logger } = require('../config/logger');
 const User = require("../db/model/User");
+const { formatDateToEng } = require("../util/dateUtil");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -72,6 +73,7 @@ exports.getUserDetails = async (username) => {
             mobile: user.mobile,
             interests: user.interests,
             enrolled: user.coursesEnrolled,
+            joined: formatDateToEng(user.createdAt),
         };
     }
 }
