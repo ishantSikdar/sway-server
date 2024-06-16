@@ -1,8 +1,16 @@
 const mongoose = require("..")
-const { DB_USER: USER, DB_COMMUNITY: COMMUNITY } = require("../../constant/dbContants")
+const { USER, COMMUNITY } = require("../../constant/dbContants")
 
 const communitySchema = new mongoose.Schema({
     communityName: {
+        type: String,
+        required: true,
+    },
+    iconUrl: {
+        type: String,
+        required: false,
+    },
+    visibility: {
         type: String,
         required: true,
     },
@@ -27,7 +35,7 @@ const communitySchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-})
+});
 
 const Community = mongoose.model(COMMUNITY, communitySchema);
 module.exports = Community;

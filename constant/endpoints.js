@@ -1,6 +1,7 @@
 module.exports = {
     ROOT_URI_USER: "/user",
     ROOT_URI_PLAYLIST: "/playlist",
+    ROOT_URI_COMMUNITY: "/community",
 
     YT_ROOT_URL: "https://www.googleapis.com/youtube/v3",
 
@@ -18,4 +19,9 @@ module.exports = {
 
     // User
     API_URI_USER_DETAILS: "/userDetails",
+
+    // Community
+    API_URI_CREATE_COMMUNITY: "/createCommunity",
+    API_URI_JOIN_COMMUNITY: "/joinCommunity",
+
 }

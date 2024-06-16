@@ -4,7 +4,8 @@ const { logger } = require('./config/logger');
 require('dotenv').config();
 const userRoute = require("./route/userRoutes");
 const playlistRoute = require("./route/playlistRoutes");
-const { ROOT_URI_USER, ROOT_URI_PLAYLIST } = require('./constant/endpoints');
+const communityRoute = require("./route/communityRoutes");
+const { ROOT_URI_USER, ROOT_URI_PLAYLIST, ROOT_URI_COMMUNITY } = require('./constant/endpoints');
 const { userAuthMiddleware } = require('./middleware/authentication/jwtAuthMiddleware');
 
 const PORT = process.env.PORT || 3000;
@@ -16,12 +17,14 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
         "http://localhost:5174",
+        "http://localhost:3000",
         "https://sway-react.vercel.app",
     ]
 }));
 
 app.use(ROOT_URI_USER, userRoute);
 app.use(ROOT_URI_PLAYLIST, playlistRoute);
+app.use(ROOT_URI_COMMUNITY, communityRoute);
 
 app.get("/helloWorld", (req, res) => {
     logger.info("Health Checkup Called");
