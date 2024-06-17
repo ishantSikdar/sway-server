@@ -14,14 +14,14 @@ const communitySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ownerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: USER,
-    },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: USER,
     }],
+    code: {
+        type: String,
+        required: false,
+    },
     createdAt: {
         type: Date,
         default: Date.now(),

@@ -1,4 +1,4 @@
-const { createCommunity } = require("../service/communityServices");
+const { createCommunity, joinCommunity } = require("../service/communityServices");
 const { ApiResponse } = require("../classes/ApiResponse");
 const { logger } = require("../config/logger");
 const { API_REQ_LOG } = require("../constant/logConstants");
@@ -13,6 +13,34 @@ exports.createCommunityRoute = async (req, res) => {
     } catch (error) {
         const cause = `Failed to create community: ${error.message}`;
         const apiResponse = new ApiResponse(`Failed to create community`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+    } 
+}
+
+exports.joinCommunityRoute = async (req, res) => {
+    try {
+        await joinCommunity(req);
+        const apiResponse = new ApiResponse(`Community Joined`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch (error) {
+        const cause = `Failed to join community: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`Invalid invitation code`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        if (req.status === 409) {
+            const apiResponse = new ApiResponse(`User already exists`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Failed to join community`);
         logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     } 
