@@ -25,4 +25,6 @@ module.exports = {
     API_URI_JOIN_COMMUNITY: "/joinCommunity",
     API_URI_GET_INVITATION_CODE: "/getInvitationCode",
 
+    API_URI_GET_JOINED_COMMUNITIES: "/joinedCommunities",
+
 }

@@ -1,14 +1,21 @@
 const Community = require("../db/model/Community");
 const User = require("../db/model/User");
+const { ObjectId } = require('mongodb');
 const { logger } = require("../config/logger");
 const { generateRandomCode } = require("../util/randomUtil");
+const { uploadFileToS3 } = require("../util/s3Util");
+const { ENTITY_COMMUNITIES } = require("../constant/appConstants");
 
 exports.createCommunity = async (req) => {
     const newCommunityRequest = JSON.parse(JSON.parse(req.body.json));
+    const communityId = new ObjectId();
+    const imageUrl = await uploadFileToS3(`${ENTITY_COMMUNITIES}/${communityId.toHexString()}`, req.file, 'groupIcon');
 
     const newCommunity = new Community({
+        _id: communityId,
         communityName: newCommunityRequest.name,
         visibility: newCommunityRequest.visibility,
+        iconUrl: imageUrl,
         members: [req.userId],
     });
 
@@ -72,4 +79,20 @@ exports.generateInviteCode = async (req) => {
 
         throw error;
     }
+}
+
+exports.fetchAllJoinedCommunities = async (req) => {
+    const userId = req.userId;
+
+    const communities = await Community.find({
+        members: userId
+    });
+
+    return communities.map((community) => {
+        return {
+            id: community._id,
+            name: community.communityName,
+            imageUrl: community.iconUrl,
+        }
+    })
 }
