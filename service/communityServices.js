@@ -4,16 +4,16 @@ const { logger } = require("../config/logger");
 const { generateRandomCode } = require("../util/randomUtil");
 
 exports.createCommunity = async (req) => {
-    const user = await User.findById(req.userId);
+    const newCommunityRequest = JSON.parse(JSON.parse(req.body.json));
 
     const newCommunity = new Community({
-        communityName: req.body.name,
-        visibility: req.body.visibility,
-        members: [user._id],
+        communityName: newCommunityRequest.name,
+        visibility: newCommunityRequest.visibility,
+        members: [req.userId],
     });
 
     const communitySaved = await newCommunity.save();
-    logger.info(`Community ${communitySaved._id} created by ${user._id}`);
+    logger.info(`Community ${communitySaved._id} created by ${req.userId}`);
 }
 
 exports.joinCommunity = async (req) => {
@@ -64,7 +64,7 @@ exports.generateInviteCode = async (req) => {
         logger.info(`Community ${communitySaved._id} joined by ${req.userId}`);
         return randomCode;
 
-    } catch(error) {
+    } catch (error) {
         if (error.name === 'CastError') {
             req.status = 404;
             throw new Error('Community not found');
