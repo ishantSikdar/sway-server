@@ -1,6 +1,7 @@
 const Community = require("../db/model/Community");
 const User = require("../db/model/User");
 const { logger } = require("../config/logger");
+const { generateRandomCode } = require("../util/randomUtil");
 
 exports.createCommunity = async (req) => {
     const user = await User.findById(req.userId);
@@ -36,4 +37,39 @@ exports.joinCommunity = async (req) => {
     community.members.push(user._id);
     const communitySaved = await community.save();
     logger.info(`Community ${communitySaved._id} joined by ${user._id}`);
+}
+
+exports.generateInviteCode = async (req) => {
+    try {
+        const community = await Community.findById(req.query.communityId);
+
+        if (!community) {
+            req.status = 404;
+            throw new Error('Community not found');
+        }
+
+        let randomCode;
+        let communityByCode;
+
+        do {
+            randomCode = generateRandomCode(req.userId);
+            communityByCode = await Community.findOne({
+                code: randomCode,
+            });
+
+        } while (communityByCode);
+
+        community.code = randomCode;
+        const communitySaved = await community.save();
+        logger.info(`Community ${communitySaved._id} joined by ${req.userId}`);
+        return randomCode;
+
+    } catch(error) {
+        if (error.name === 'CastError') {
+            req.status = 404;
+            throw new Error('Community not found');
+        }
+
+        throw error;
+    }
 }

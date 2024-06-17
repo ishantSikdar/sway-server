@@ -1,4 +1,4 @@
-const { createCommunity, joinCommunity } = require("../service/communityServices");
+const { createCommunity, joinCommunity, generateInviteCode } = require("../service/communityServices");
 const { ApiResponse } = require("../classes/ApiResponse");
 const { logger } = require("../config/logger");
 const { API_REQ_LOG } = require("../constant/logConstants");
@@ -41,6 +41,28 @@ exports.joinCommunityRoute = async (req, res) => {
         }
 
         const apiResponse = new ApiResponse(`Failed to join community`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+    } 
+}
+
+exports.generateInvitationCodeRoute = async (req, res) => {
+    try {
+        const code = await generateInviteCode(req);
+        const apiResponse = new ApiResponse(`Code Generated`, { invitation: code });
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch (error) {
+        const cause = `Failed to generated code: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`No Community found by Id: ${req.query.communityId}`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Failed to generate code`);
         logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     } 
