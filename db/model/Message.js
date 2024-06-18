@@ -1,5 +1,5 @@
 const mongoose = require("..");
-const { MESSAGE } = require("../../constant/dbContants");
+const { MESSAGE, USER } = require("../../constant/dbContants");
 
 const messageSchema = new mongoose.Schema({
     userId: {
@@ -18,7 +18,7 @@ const messageSchema = new mongoose.Schema({
             default: "text",
             required: true,
         },
-        message: {
+        data: {
             type: String,
             default: "",
             required: true,
@@ -40,4 +40,4 @@ const messageSchema = new mongoose.Schema({
 })
 
 const Message = mongoose.model(MESSAGE, messageSchema);
-exports.module = Message;
+module.exports = Message;
