@@ -7,8 +7,22 @@ exports.validateBodyMiddleware = (requestSchema) => {
             next();
         } catch(error) {
             return res.status(400).json(
-                new ApiResponse(`Invalid request body: ${error.errors[0].message}`)
+                new ApiResponse(`${error.errors[0].message}`)
             );
         }
     }
+}
+
+exports.validateStringifiedBodyMiddleware = (requestSchema) => {
+    return (req, res, next) => {
+        try {
+            console.log(req.body)
+            requestSchema.parse(JSON.parse(JSON.parse(req.body.json)));
+            next();
+        } catch(error) {
+            return res.status(400).json(
+                new ApiResponse(`${error.errors[0].message}`)
+            );
+        }
+    } 
 }

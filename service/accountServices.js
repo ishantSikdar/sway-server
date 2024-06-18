@@ -3,15 +3,19 @@ const bcrypt = require('bcryptjs');
 const { logger } = require('../config/logger');
 const User = require("../db/model/User");
 const { formatDateToEng } = require("../util/dateUtil");
-
+const { ObjectId } = require('mongodb');
+const { uploadFileToS3 } = require('../util/s3Util');
+const { ENTITY_USERS } = require('../constant/appConstants');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.signUp = async (req) => {
+    const jsonRequest = JSON.parse(JSON.parse(req.body.json));
+
     const existingUser = await User.findOne({
         $or: [
-            { username: req.body.username },
-            { email: req.body.email },
-            { mobile: req.body.mobile }
+            { username: jsonRequest.username },
+            { email: jsonRequest.email },
+            { mobile: jsonRequest.mobile }
         ]
     });
 
@@ -20,13 +24,18 @@ exports.signUp = async (req) => {
         throw new Error('User already exists');
     }
 
+    const userId = new ObjectId();
+    const profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic');
+
     const newUser = new User({
-        name: req.body.name,
-        username: req.body.username,
-        email: req.body.email,
-        password: await bcrypt.hash(req.body.password, 10),
-        mobile: req.body.mobile,
-    })
+        _id: userId,
+        name: jsonRequest.name,
+        username: jsonRequest.username,
+        email: jsonRequest.email,
+        photo: profilePicUrl,
+        password: await bcrypt.hash(jsonRequest.password, 10),
+        mobile: jsonRequest.mobile,
+    });
 
     const user = await newUser.save();
     logger.info(`User ${user._id} Registered`);
