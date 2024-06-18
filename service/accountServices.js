@@ -25,8 +25,12 @@ exports.signUp = async (req) => {
     }
 
     const userId = new ObjectId();
-    const profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic');
 
+    let profilePicUrl;
+    if (req.file) {
+        profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic');
+    }
+    
     const newUser = new User({
         _id: userId,
         name: jsonRequest.name,
@@ -75,6 +79,7 @@ exports.getUserDetails = async (req) => {
     } else {
         return {
             username: user.username,
+            photoUrl: user.photo,
             name: user.name,
             email: user.email,
             mobile: user.mobile,
@@ -93,8 +98,14 @@ exports.editUserDetails = async (req) => {
         throw new Error('User not found');
 
     } else {
-        const newUser = req.body;
-        console.log(newUser);
+        const newUser = JSON.parse(JSON.parse(req.body.json));
+
+        if (req.file) {
+            const photoUrl = await uploadFileToS3(`${ENTITY_USERS}/${user._id.toHexString()}`, req.file, 'profilePic');
+            newUser.photo = photoUrl;
+            logger.info(`Update profile pic of user ${req.userId}`);
+        }
+
         for (const key in newUser) {
             if (newUser[key] !== undefined && newUser[key] !== "") {
                 user[key] = newUser[key];
