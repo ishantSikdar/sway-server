@@ -92,6 +92,13 @@ exports.getCommunityDetailsRoute = async (req, res) => {
         
     } catch (error) {
         const cause = `Failed to fetch Community Details, ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`No Community found by Id: ${req.query.communityId}`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+        
         const apiResponse = new ApiResponse(`Failed to fetch Community Details`);
         logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
