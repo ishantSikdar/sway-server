@@ -96,3 +96,15 @@ exports.fetchAllJoinedCommunities = async (req) => {
         }
     })
 }
+
+exports.fetchCommunityDetails = async (req) => {
+    const community = await Community.findById(req.query.communityId);
+    return {
+        id: community.id,
+        name: community.communityName,
+        iconUrl: community.iconUrl,
+        visibility: community.visibility,
+        members: community.members,
+        birthdate: community.createdAt,
+    }
+}

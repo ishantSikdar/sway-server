@@ -1,4 +1,4 @@
-const { createCommunity, joinCommunity, generateInviteCode, fetchAllJoinedCommunities } = require("../service/communityServices");
+const { createCommunity, joinCommunity, generateInviteCode, fetchAllJoinedCommunities, fetchCommunityDetails } = require("../service/communityServices");
 const { ApiResponse } = require("../classes/ApiResponse");
 const { logger } = require("../config/logger");
 const { API_REQ_LOG } = require("../constant/logConstants");
@@ -68,7 +68,7 @@ exports.generateInvitationCodeRoute = async (req, res) => {
     }
 }
 
-exports.getJoinedCommunities = async (req, res) => {
+exports.getJoinedCommunitiesRoute = async (req, res) => {
     try {
         const communities = await fetchAllJoinedCommunities(req);
         const apiResponse = new ApiResponse(`Joined Communities Fetched`, { joinedCommunities: communities });
@@ -78,6 +78,21 @@ exports.getJoinedCommunities = async (req, res) => {
     } catch (error) {
         const cause = `Failed to fetch joined communities, ${error.message}`;
         const apiResponse = new ApiResponse(`Failed to fetch joined communities`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+    }
+}
+
+exports.getCommunityDetailsRoute = async (req, res) => {
+    try {
+        const community = await fetchCommunityDetails(req);
+        const apiResponse = new ApiResponse(`Community Details Fetched`, { community });
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
+        return res.status(200).json(apiResponse);
+        
+    } catch (error) {
+        const cause = `Failed to fetch Community Details, ${error.message}`;
+        const apiResponse = new ApiResponse(`Failed to fetch Community Details`);
         logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     }
