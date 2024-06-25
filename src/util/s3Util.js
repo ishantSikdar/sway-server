@@ -17,13 +17,13 @@ exports.uploadFileToS3 = async (path, file, fileName) => {
             return `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${entityKey}`;
         
         } else {
-            console.error(uploadedEntity);
+            logger.error(uploadedEntity);
             throw new Error(uploadedEntity);
         }
 
     } catch (error) {
-        console.error(`Failed to upload file -> ${file.originalname} to S3, ${error.message}`);
-        console.error(error)
+        logger.error(`Failed to upload file -> ${file.originalname} to S3, ${error.message}`);
+        logger.error(error)
         throw error;
     }
 }

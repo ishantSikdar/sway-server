@@ -16,7 +16,6 @@ exports.validateBodyMiddleware = (requestSchema) => {
 exports.validateStringifiedBodyMiddleware = (requestSchema) => {
     return (req, res, next) => {
         try {
-            console.log(req.body)
             requestSchema.parse(JSON.parse(JSON.parse(req.body.json)));
             next();
         } catch(error) {

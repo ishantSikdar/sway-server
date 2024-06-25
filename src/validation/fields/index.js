@@ -24,3 +24,8 @@ exports.mobileNumberSchema = zod.string({
     invalid_type_error: "mobile must be a string",
     required_error: "mobile is required"
 }).length(10, "Mobile number must be of 10 digits");
+
+exports.objectIdSchema = zod.string()
+    .refine((id) => /^[0-9a-fA-F]{24}$/.test(id), {
+        message: "Invalid BSON ObjectId",
+    })
