@@ -1,11 +1,12 @@
+const url = require('url');
 const jwt = require('jsonwebtoken');
-const {   } = require('../../constant/logConstants');
 const { logger } = require('../../config/logger');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Middleware function to handle WebSocket authentication
 exports.jwtWSAuthMiddleware = (ws, req) => {
-    const authToken = req.headers.authorization;
+    const queryObject = url.parse(req.url, true).query;
+    const authToken = queryObject.auth;
 
     if (!authToken) {
         logger.info('Authorization token is missing');
@@ -29,7 +30,7 @@ exports.jwtWSAuthMiddleware = (ws, req) => {
         }
     } catch (error) {
         logger.info('Invalid authorization token');
-        ws.close(1008, apiResponse);
+        ws.close(1008, 'Invalid authorization token');
         return { status: false, message: 'Invalid authorization token' };
 
     }

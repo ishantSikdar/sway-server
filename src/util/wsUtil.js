@@ -3,7 +3,6 @@ const url = require('url');
 const { jwtWSAuthMiddleware } = require("../middleware/authentication/jwtWSAuthMiddleware");
 const { objectIdSchema } = require('../validation/fields');
 const Community = require('../db/model/Community');
-const { API_REQ_LOG, } = require('../constant/logConstants');
 const User = require('../db/model/User');
 const { logger } = require('../config/logger');
 const Message = require('../db/model/Message');
@@ -47,20 +46,22 @@ exports.establistChatConnection = async (socket, req) => {
     return { status: true, message: "Connection Established", community, user };
 }
 
-exports.sendMessageToClients = async (messageData, user, clients, senderSocket) => {
+exports.sendMessageToClients = async (messageData, user, community, clients, senderSocket) => {
     const messageTime = new Date();
     const messageToBeSaved = new Message({
         userId: senderSocket.userId,
         content: { data: messageData.content },
         createdAt: messageTime
     });
-    await messageToBeSaved.save();
+    const savedMessage = await messageToBeSaved.save();
 
     clients.forEach((metadata, clientSocket) => {
-        if (metadata.communityId === senderSocket.communityId && clientSocket.readyState === WebSocket.OPEN) {
+        if (metadata.communityId === senderSocket.communityId && community.members.includes(user.id) && clientSocket.readyState === WebSocket.OPEN) {
+            console.log(community.members);
+            console.log(user.id)
             clientSocket.send(
                 JSON.stringify({
-                    message: messageData.content,
+                    message: [{ id: savedMessage.id, content: messageData.content }],
                     sender: {
                         name: user.name,
                         photoUrl: user.photo,
@@ -68,6 +69,7 @@ exports.sendMessageToClients = async (messageData, user, clients, senderSocket) 
                     time: convertToISTddMMyyHHMM(messageTime),
                 })
             );
+            logger.info("Message sent by " + clientSocket.userId);
         }
     });
 }

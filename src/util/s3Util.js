@@ -5,7 +5,7 @@ const { logger } = require('../config/logger');
 
 exports.uploadFileToS3 = async (path, file, fileName) => {
     try {
-        const entityKey = `${path}/${fileName}.${getFileExtension(file.originalname)}`;
+        const entityKey = `${path}/${fileName}`;
         const uploadedEntity = await s3Accessor.send(new PutObjectCommand({
             Bucket: process.env.S3_BUCKET_NAME,
             Key: entityKey,

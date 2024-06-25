@@ -28,7 +28,7 @@ exports.signUp = async (req) => {
 
     let profilePicUrl;
     if (req.file) {
-        profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic');
+        profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic.png');
     }
     
     const newUser = new User({
@@ -101,7 +101,7 @@ exports.editUserDetails = async (req) => {
         const newUser = JSON.parse(JSON.parse(req.body.json));
 
         if (req.file) {
-            const photoUrl = await uploadFileToS3(`${ENTITY_USERS}/${user._id.toHexString()}`, req.file, 'profilePic');
+            const photoUrl = await uploadFileToS3(`${ENTITY_USERS}/${user._id.toHexString()}`, req.file, 'profilePic.png');
             newUser.photo = photoUrl;
             logger.info(`Update profile pic of user ${req.userId}`);
         }

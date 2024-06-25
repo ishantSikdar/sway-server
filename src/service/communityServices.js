@@ -9,7 +9,7 @@ const { ENTITY_COMMUNITIES } = require("../constant/appConstants");
 exports.createCommunity = async (req) => {
     const newCommunityRequest = JSON.parse(JSON.parse(req.body.json));
     const communityId = new ObjectId();
-    const imageUrl = await uploadFileToS3(`${ENTITY_COMMUNITIES}/${communityId.toHexString()}`, req.file, 'groupIcon');
+    const imageUrl = await uploadFileToS3(`${ENTITY_COMMUNITIES}/${communityId.toHexString()}`, req.file, 'groupIcon.png');
 
     const newCommunity = new Community({
         _id: communityId,
