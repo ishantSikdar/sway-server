@@ -2,6 +2,7 @@ const { createCommunity, joinCommunity, generateInviteCode, fetchAllJoinedCommun
 const { ApiResponse } = require("../classes/ApiResponse");
 const { logger } = require("../config/logger");
 const { API_REQ_LOG } = require("../constant/logConstants");
+const { fetchCommunityChatsPagebyId } = require("../service/chatServices");
 
 exports.createCommunityRoute = async (req, res) => {
     try {
@@ -100,6 +101,21 @@ exports.getCommunityDetailsRoute = async (req, res) => {
         }
         
         const apiResponse = new ApiResponse(`Failed to fetch Community Details`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+    }
+}
+
+exports.getCommunityChatsByIdRoute = async (req, res) => {
+    try {
+        const chatMessages = await fetchCommunityChatsPagebyId(req);
+        const apiResponse = new ApiResponse(`Communities Chats Fetched`, { chatMessages });
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
+        return res.status(200).json(apiResponse);
+        
+    } catch (error) {
+        const cause = `Failed to fetch community chats, ${error.message}`;
+        const apiResponse = new ApiResponse(`Failed to fetch community chats`);
         logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     }

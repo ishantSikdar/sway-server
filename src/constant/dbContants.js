@@ -1,7 +1,7 @@
 module.exports = {
     // model names
     COURSE: "course",
-    USER: "user",
+    USER: "users",
     MESSAGE: "message",
     SHORTS: "shorts",
     COMMENTS: "comments",

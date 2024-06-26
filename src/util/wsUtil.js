@@ -51,6 +51,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
     const messageToBeSaved = new Message({
         userId: senderSocket.userId,
         content: { data: messageData.content },
+        communityId: senderSocket.communityId,
         createdAt: messageTime
     });
     const savedMessage = await messageToBeSaved.save();
@@ -61,7 +62,10 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
             console.log(user.id)
             clientSocket.send(
                 JSON.stringify({
-                    message: [{ id: savedMessage.id, content: messageData.content }],
+                    message: [{
+                        id: savedMessage.id,
+                        content: messageData.content
+                    }],
                     sender: {
                         name: user.name,
                         photoUrl: user.photo,

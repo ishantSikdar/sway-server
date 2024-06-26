@@ -5,13 +5,15 @@ const { API_URI_CREATE_COMMUNITY,
     API_URI_JOIN_COMMUNITY,
     API_URI_GET_INVITATION_CODE,
     API_URI_GET_JOINED_COMMUNITIES,
-    API_URI_GET_COMMUNITY_DETAILS
+    API_URI_GET_COMMUNITY_DETAILS,
+    API_URI_GET_COMMUNITY_CHATS
 } = require('../constant/endpoints');
 const { createCommunityRoute,
     joinCommunityRoute,
     generateInvitationCodeRoute,
     getCommunityDetailsRoute,
-    getJoinedCommunitiesRoute
+    getJoinedCommunitiesRoute,
+    getCommunityChatsByIdRoute
 } = require('../controller/communityController');
 
 const router = Router();
@@ -19,7 +21,8 @@ const router = Router();
 router.post(API_URI_CREATE_COMMUNITY, userAuthMiddleware, multerUpload.single('image'), createCommunityRoute);
 router.patch(API_URI_JOIN_COMMUNITY, userAuthMiddleware, joinCommunityRoute);
 router.get(API_URI_GET_INVITATION_CODE, userAuthMiddleware, generateInvitationCodeRoute);
-router.get(API_URI_GET_JOINED_COMMUNITIES, userAuthMiddleware, getJoinedCommunitiesRoute)
-router.get(API_URI_GET_COMMUNITY_DETAILS, userAuthMiddleware, getCommunityDetailsRoute)
+router.get(API_URI_GET_JOINED_COMMUNITIES, userAuthMiddleware, getJoinedCommunitiesRoute);
+router.get(API_URI_GET_COMMUNITY_DETAILS, userAuthMiddleware, getCommunityDetailsRoute);
+router.get(API_URI_GET_COMMUNITY_CHATS, userAuthMiddleware, getCommunityChatsByIdRoute)
 
 module.exports = router;

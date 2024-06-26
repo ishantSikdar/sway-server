@@ -1,5 +1,5 @@
 const mongoose = require("..");
-const { MESSAGE, USER } = require("../../constant/dbContants");
+const { MESSAGE, USER, COMMUNITY } = require("../../constant/dbContants");
 
 const messageSchema = new mongoose.Schema({
     userId: {
@@ -24,6 +24,11 @@ const messageSchema = new mongoose.Schema({
             required: true,
         }
     }, 
+    communityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: COMMUNITY,
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: new Date(),
