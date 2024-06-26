@@ -1,4 +1,5 @@
 const { WebSocket } = require('ws');
+const { ObjectId } = require('mongodb');
 const url = require('url');
 const { jwtWSAuthMiddleware } = require("../middleware/authentication/jwtWSAuthMiddleware");
 const { objectIdSchema } = require('../validation/fields');
@@ -62,6 +63,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
             console.log(user.id)
             clientSocket.send(
                 JSON.stringify({
+                    msgGroupId: new ObjectId(),
                     message: [{
                         id: savedMessage.id,
                         content: messageData.content

@@ -91,8 +91,9 @@ const parseMessagesSequentially = (chatMessages) => {
             });
 
         } else {
-
+            const msgGroupId = new ObjectId();
             groupedMessages.unshift({
+                msgGroupId,
                 userId: currentMessage.userId,
                 message: [
                     {
@@ -107,7 +108,7 @@ const parseMessagesSequentially = (chatMessages) => {
                 time: currentMessage.time,
                 timestamp: currentMessage.timestamp,
             });
-        }
+        }   
     });
       
     return groupedMessages;
