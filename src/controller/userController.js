@@ -98,3 +98,49 @@ exports.editUserDetailsRoute = async (req, res) => {
 
     }
 }
+
+exports.editUserProfilePictureRoute = async (req, res) => {
+    try {
+        await accountServices.editProfilePicture(req);
+        const apiResponse = new ApiResponse(`Edited Profile Picture`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Profile picture edited successfully`, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch(error) {
+        const cause = `Error editing user profile picture, ${req.userId}, Cause: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Error occured editing User profile picture`);
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+
+    }
+}
+
+exports.editUserBannerPictureRoute = async (req, res) => {
+    try {
+        await accountServices.editBannerPicture(req);
+        const apiResponse = new ApiResponse(`Edited Banner Picture`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Banner picture edited successfully`, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch(error) {
+        const cause = `Error editing user banner picture, ${req.userId}, Cause: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Error occured editing User banner picture`);
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+
+    }
+}

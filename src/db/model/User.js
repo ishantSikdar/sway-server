@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: false,
     },
+    banner: {
+        type: String,
+        require: false,
+    },
     interests: [{
         type: String,
         required: false,

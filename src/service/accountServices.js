@@ -30,7 +30,7 @@ exports.signUp = async (req) => {
     if (req.file) {
         profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic.png');
     }
-    
+
     const newUser = new User({
         _id: userId,
         name: jsonRequest.name,
@@ -80,6 +80,7 @@ exports.getUserDetails = async (req) => {
         return {
             username: user.username,
             photoUrl: user.photo,
+            bannerUrl: user.banner,
             name: user.name,
             email: user.email,
             mobile: user.mobile,
@@ -112,5 +113,35 @@ exports.editUserDetails = async (req) => {
             }
         }
         await user.save();
+    }
+}
+
+exports.editProfilePicture = async (req) => {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+        req.status = 404;
+        throw new Error('User not found');
+
+    } else {
+        const photoUrl = await uploadFileToS3(`${ENTITY_USERS}/${user._id.toHexString()}`, req.file, 'profilePic.png');
+        user.photo = photoUrl;
+        await user.save();
+        logger.info(`Update profile pic of user ${req.userId}`);
+    }
+}
+
+exports.editBannerPicture = async (req) => {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+        req.status = 404;
+        throw new Error('User not found');
+
+    } else {
+        const photoUrl = await uploadFileToS3(`${ENTITY_USERS}/${user._id.toHexString()}`, req.file, 'bannerPic.png');
+        user.banner = photoUrl;        
+        await user.save();
+        logger.info(`Update profile pic of user ${req.userId}`);
     }
 }

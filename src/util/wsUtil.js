@@ -59,8 +59,6 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
 
     clients.forEach((metadata, clientSocket) => {
         if (metadata.communityId === senderSocket.communityId && community.members.includes(user.id) && clientSocket.readyState === WebSocket.OPEN) {
-            console.log(community.members);
-            console.log(user.id)
             clientSocket.send(
                 JSON.stringify({
                     msgGroupId: new ObjectId(),

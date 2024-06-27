@@ -1,6 +1,5 @@
 const s3Accessor = require('../config/s3Config');
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
-const { getFileExtension } = require('./stringUtil');
 const { logger } = require('../config/logger');
 
 exports.uploadFileToS3 = async (path, file, fileName) => {
@@ -11,6 +10,7 @@ exports.uploadFileToS3 = async (path, file, fileName) => {
             Key: entityKey,
             Body: file.buffer
         }));
+
         
         if (uploadedEntity.$metadata.httpStatusCode === 200) {
             logger.info(`Uploaded File to S3 successfully\n  ->Filename: ${file.originalname}\n  ->Size: ${file.size}`)
