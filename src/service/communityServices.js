@@ -156,6 +156,7 @@ exports.fetchCommunityMembers = async (req) => {
                     _id: 0,
                     userId: '$userInfo._id',
                     name: '$userInfo.name',
+                    username: '$userInfo.username',
                     photoUrl: '$userInfo.photo'
                 }
             }

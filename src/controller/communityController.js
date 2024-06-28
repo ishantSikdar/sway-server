@@ -123,8 +123,8 @@ exports.getCommunityChatsByIdRoute = async (req, res) => {
 
 exports.getCommunityMembersRoute = async (req, res) => {
     try {
-        const community = await fetchCommunityMembers(req);
-        const apiResponse = new ApiResponse(`Community Details Fetched`, { community });
+        const members = await fetchCommunityMembers(req);
+        const apiResponse = new ApiResponse(`Community Details Fetched`, { members });
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
         return res.status(200).json(apiResponse);
         
