@@ -6,14 +6,16 @@ const { API_URI_CREATE_COMMUNITY,
     API_URI_GET_INVITATION_CODE,
     API_URI_GET_JOINED_COMMUNITIES,
     API_URI_GET_COMMUNITY_DETAILS,
-    API_URI_GET_COMMUNITY_CHATS
+    API_URI_GET_COMMUNITY_CHATS,
+    API_URI_GET_COMMUNITY_MEMBERS
 } = require('../constant/endpoints');
 const { createCommunityRoute,
     joinCommunityRoute,
     generateInvitationCodeRoute,
     getCommunityDetailsRoute,
     getJoinedCommunitiesRoute,
-    getCommunityChatsByIdRoute
+    getCommunityChatsByIdRoute,
+    getCommunityMembersRoute
 } = require('../controller/communityController');
 
 const router = Router();
@@ -24,5 +26,6 @@ router.get(API_URI_GET_INVITATION_CODE, userAuthMiddleware, generateInvitationCo
 router.get(API_URI_GET_JOINED_COMMUNITIES, userAuthMiddleware, getJoinedCommunitiesRoute);
 router.get(API_URI_GET_COMMUNITY_DETAILS, userAuthMiddleware, getCommunityDetailsRoute);
 router.get(API_URI_GET_COMMUNITY_CHATS, userAuthMiddleware, getCommunityChatsByIdRoute)
+router.get(API_URI_GET_COMMUNITY_MEMBERS, userAuthMiddleware, getCommunityMembersRoute);
 
 module.exports = router;

@@ -30,5 +30,6 @@ module.exports = {
     API_URI_GET_JOINED_COMMUNITIES: "/joinedCommunities",
     API_URI_GET_COMMUNITY_DETAILS: "/communityDetails",
     API_URI_GET_COMMUNITY_CHATS: "/communityChats",
+    API_URI_GET_COMMUNITY_MEMBERS: "/communityMembers",
 
 }

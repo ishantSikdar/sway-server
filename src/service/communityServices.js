@@ -5,6 +5,8 @@ const { logger } = require("../config/logger");
 const { generateRandomCode } = require("../util/randomUtil");
 const { uploadFileToS3 } = require("../util/s3Util");
 const { ENTITY_COMMUNITIES } = require("../constant/appConstants");
+const { USER } = require("../constant/dbContants");
+const mongoose = require("mongoose");
 
 exports.createCommunity = async (req) => {
     const newCommunityRequest = JSON.parse(JSON.parse(req.body.json));
@@ -114,8 +116,54 @@ exports.fetchCommunityDetails = async (req) => {
             members: community.members,
             birthdate: community.createdAt,
         }
-        
-    } catch(error) {
+
+    } catch (error) {
+        if (error.name === 'CastError') {
+            req.status = 404;
+            throw new Error('Community not found');
+        }
+
+        throw error;
+    }
+}
+
+exports.fetchCommunityMembers = async (req) => {
+    try {
+        const communityId = ObjectId.createFromHexString(req.query.communityId);
+
+        const members = await Community.aggregate([
+            {
+                $match: {
+                    _id: communityId
+                }
+            },
+            {
+                $unwind: '$members',
+            },
+            {
+                $lookup: {
+                    from: USER,
+                    localField: 'members',
+                    foreignField: '_id',
+                    as: 'userInfo'
+                }
+            },
+            {
+                $unwind: '$userInfo',
+            },
+            {
+                $project: {
+                    _id: 0,
+                    userId: '$userInfo._id',
+                    name: '$userInfo.name',
+                    photoUrl: '$userInfo.photo'
+                }
+            }
+        ]);
+
+        return members;
+
+    } catch (error) {
         if (error.name === 'CastError') {
             req.status = 404;
             throw new Error('Community not found');
