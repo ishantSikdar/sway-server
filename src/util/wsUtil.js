@@ -67,7 +67,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
                         content: messageData.content
                     }],
                     sender: {
-                        name: user.name,
+                        name: user.username,
                         photoUrl: `${user.photo}?t=${new Date().getTime()}`,
                     },
                     time: convertToISTddMMyyHHMM(messageTime),

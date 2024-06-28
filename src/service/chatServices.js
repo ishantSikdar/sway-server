@@ -46,7 +46,7 @@ const aggregateCommunityMessagesByCommunityId = async (communityObjectId) => {
                         content: '$content.data'
                     },
                     sender: {
-                        name: '$userInfo.name',
+                        name: '$userInfo.username',
                         photoUrl: '$userInfo.photo'
                     },
                     time: {

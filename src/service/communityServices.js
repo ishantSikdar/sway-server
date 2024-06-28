@@ -57,6 +57,10 @@ exports.generateInviteCode = async (req) => {
             throw new Error('Community not found');
         }
 
+        if (community.code) {
+            return community.code;
+        }
+
         let randomCode;
         let communityByCode;
 
