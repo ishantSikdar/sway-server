@@ -11,10 +11,10 @@ exports.signupRoute = async (req, res) => {
         return res.status(200).json(apiResponse);
 
     } catch (error) {
-        const cause = `Error Registering New User of Email: ${req.body.email}, Cause: ${error.message}`;
+        const cause = `Error Registering New User, Cause: ${error.message}`;
 
         if (req.status === 409) {
-            const apiResponse = new ApiResponse(`User already exists`);
+            const apiResponse = new ApiResponse(error.message);
             logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
@@ -60,7 +60,7 @@ exports.userDetailsRoute = async (req, res) => {
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Details fetched successfully`, req.url));
         return res.status(200).json(apiResponse);
 
-    } catch(error) {
+    } catch (error) {
         const cause = `Error fetching user details of username: ${req.userId}, Cause: ${error.message}`;
 
         if (req.status === 404) {
@@ -83,11 +83,17 @@ exports.editUserDetailsRoute = async (req, res) => {
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Details edited successfully`, req.url));
         return res.status(200).json(apiResponse);
 
-    } catch(error) {
+    } catch (error) {
         const cause = `Error editing user details of username: ${req.userId}, Cause: ${error.message}`;
 
         if (req.status === 404) {
             const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        if (req.status === 409) {
+            const apiResponse = new ApiResponse(error.message);
             logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);
         }
@@ -106,7 +112,7 @@ exports.editUserProfilePictureRoute = async (req, res) => {
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Profile picture edited successfully`, req.url));
         return res.status(200).json(apiResponse);
 
-    } catch(error) {
+    } catch (error) {
         const cause = `Error editing user profile picture, ${req.userId}, Cause: ${error.message}`;
 
         if (req.status === 404) {
@@ -129,7 +135,7 @@ exports.editUserBannerPictureRoute = async (req, res) => {
         logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User Banner picture edited successfully`, req.url));
         return res.status(200).json(apiResponse);
 
-    } catch(error) {
+    } catch (error) {
         const cause = `Error editing user banner picture, ${req.userId}, Cause: ${error.message}`;
 
         if (req.status === 404) {

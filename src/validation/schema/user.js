@@ -26,3 +26,10 @@ exports.signInSchema = zod.object({
     }),
     password: passwordSchema,
 });
+
+exports.editUserSchema = zod.object({
+    name: nameSchema.optional(),
+    username: usernameSchema.optional(),
+    mobile: mobileNumberSchema.optional(),
+    email: emailSchema.optional()
+});
