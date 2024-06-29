@@ -7,6 +7,7 @@ const { formatDateToEng } = require("../util/dateUtil");
 const { ObjectId } = require('mongodb');
 const { uploadFileToS3 } = require('../util/s3Util');
 const { ENTITY_USERS } = require('../constant/appConstants');
+const Community = require('../db/model/Community');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.signUp = async (req) => {
@@ -20,7 +21,6 @@ exports.signUp = async (req) => {
         ]
     });
 
-
     if (existingUser) {
         let conflictKey = '';
         if (existingUser.username === jsonRequest.username) {
@@ -32,16 +32,17 @@ exports.signUp = async (req) => {
         }
 
         req.status = 409;
-        throw new Error(`User already exists ${conflictKey ? `by ${conflictKey}` : ''}`);
+        throw new Error(`User already exists ${conflictKey && `by ${conflictKey}` }`);
     }
 
     const userId = new ObjectId();
-
+    const welcomeCommunity = await Community.findById(ObjectId.createFromHexString(process.env.DEFAULT_COMMUNITY_ID));
+    
     let profilePicUrl;
     if (req.file) {
         profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic.png');
     }
-
+    
     const newUser = new User({
         _id: userId,
         name: jsonRequest.name,
@@ -51,6 +52,9 @@ exports.signUp = async (req) => {
         password: await bcrypt.hash(jsonRequest.password, 10),
         mobile: jsonRequest.mobile,
     });
+    
+    welcomeCommunity.members.push(userId);
+    welcomeCommunity.save();
 
     const user = await newUser.save();
     logger.info(`User ${user._id} Registered`);
@@ -64,12 +68,12 @@ exports.signIn = async (req) => {
             { mobile: req.body.username }
         ]
     });
-
+    
     if (!user) {
         req.status = 404;
         throw new Error('User not found');
     }
-
+    
     const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
 
     if (!isPasswordValid) {
