@@ -1,3 +1,4 @@
+const { DateTime } = require('luxon');
 const { format, toZonedTime } = require('date-fns-tz');
 
 exports.getCurrentDateInIST = () => {
@@ -31,6 +32,10 @@ exports.convertToIST = (date) => {
     return istDate;
 }
 
-exports.convertToISTddMMyyHHMM = (date) => {
-    return format(date, 'dd/MM/yy - HH:mm', { timeZone: 'Asia/Kolkata' });
+
+exports.convertToISTddMMyyyyHHMM = (date) => {
+    const utcDateTime = DateTime.fromJSDate(date, { zone: 'utc' });
+    const istDateTime = utcDateTime.setZone('Asia/Kolkata');
+    const formatted = istDateTime.toFormat('dd/MM/yyyy - HH:mm');
+    return formatted;
 }
