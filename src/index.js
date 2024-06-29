@@ -2,7 +2,7 @@ const { logger } = require('./config/logger');
 require('dotenv').config();
 const { initializeApp } = require('./config/appConfig');
 const { WebSocket } = require('ws');
-const { establistChatConnection, sendMessageToClients } = require('./util/wsUtil');
+const { establistChatConnection, sendMessageToClients } = require('./service/chatSocketServices');
 const PORT = process.env.PORT || 3000;
 
 // Express Server

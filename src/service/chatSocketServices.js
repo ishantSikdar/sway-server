@@ -7,7 +7,7 @@ const Community = require('../db/model/Community');
 const User = require('../db/model/User');
 const { logger } = require('../config/logger');
 const Message = require('../db/model/Message');
-const { convertToISTddMMyyHHMM } = require('./dateUtil');
+const { convertToISTddMMyyHHMM } = require('../util/dateUtil');
 
 exports.establistChatConnection = async (socket, req) => {
     const authResponse = jwtWSAuthMiddleware(socket, req);
@@ -68,7 +68,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
                     }],
                     sender: {
                         name: user.username,
-                        photoUrl: `${user.photo}?t=${new Date().getTime()}`,
+                        photoUrl: user.photo,
                     },
                     time: convertToISTddMMyyHHMM(messageTime),
                 })

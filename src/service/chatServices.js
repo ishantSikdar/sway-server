@@ -52,11 +52,11 @@ const aggregateCommunityMessagesByCommunityId = async (communityObjectId) => {
                     time: {
                         $dateToString: {
                             format: '%d/%m/%Y %H:%M',
-                            date: '$time',
+                            date: '$createdAt',
                             timezone: 'Asia/Kolkata',
                         }
                     },
-                    timestamp: '$time',
+                    timestamp: '$createdAt',
                 }
             },
             {
