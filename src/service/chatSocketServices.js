@@ -55,7 +55,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
         communityId: senderSocket.communityId,
         createdAt: messageTime
     });
-    const savedMessage = await messageToBeSaved.save();
+    messageToBeSaved.save();
 
     clients.forEach((metadata, clientSocket) => {
         if (metadata.communityId === senderSocket.communityId && community.members.includes(user.id) && clientSocket.readyState === WebSocket.OPEN) {
@@ -63,7 +63,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
                 JSON.stringify({
                     msgGroupId: new ObjectId(),
                     message: [{
-                        id: savedMessage.id,
+                        id: new ObjectId(),
                         content: messageData.content
                     }],
                     sender: {
