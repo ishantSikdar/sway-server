@@ -98,7 +98,7 @@ exports.fetchAllJoinedCommunities = async (req) => {
         return {
             id: community._id,
             name: community.communityName,
-            imageUrl: `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`,
+            imageUrl: community.iconUrl && `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`,
         }
     })
 }
@@ -115,7 +115,7 @@ exports.fetchCommunityDetails = async (req) => {
         return {
             id: community.id,
             name: community.communityName,
-            iconUrl: `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`,
+            iconUrl: community.iconUrl && `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`,
             visibility: community.visibility,
             members: community.members,
             birthdate: community.createdAt,
@@ -176,6 +176,32 @@ exports.fetchCommunityMembers = async (req) => {
             throw new Error('Community not found');
         }
 
+        throw error;
+    }
+}
+
+exports.fetchPublicCommunities = async (req) => {
+    try {
+        const searchTag = req.query.communityName;
+        const joinedCommunities = await this.fetchAllJoinedCommunities({ userId: req.userId });
+        const joinedCommunityIds = joinedCommunities.map((community) => community.id);
+
+        const publicCommunities = await Community.find({
+            communityName: new RegExp(searchTag, 'i'),
+            visibility: 'public',
+            _id: { $nin: joinedCommunityIds }
+        });
+
+        return publicCommunities.map((community) => {
+            return {
+                id: community._id,
+                name: community.communityName,
+                iconUrl: community.iconUrl && `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`
+            }
+        });
+
+    } catch(error) {
+        logger.error('Cant fetch public communities', error);
         throw error;
     }
 }

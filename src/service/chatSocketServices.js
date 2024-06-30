@@ -68,7 +68,7 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
                     }],
                     sender: {
                         name: user.username,
-                        photoUrl: user.photo,
+                        photoUrl: user.photo && `${process.env.IMAGE_CDN_BASE_URL}${user.photo}`,
                     },
                     time: convertToISTddMMyyyyHHMM(messageTime),
                 })
