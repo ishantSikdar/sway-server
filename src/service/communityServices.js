@@ -98,7 +98,7 @@ exports.fetchAllJoinedCommunities = async (req) => {
         return {
             id: community._id,
             name: community.communityName,
-            imageUrl: community.iconUrl,
+            imageUrl: `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`,
         }
     })
 }
@@ -115,7 +115,7 @@ exports.fetchCommunityDetails = async (req) => {
         return {
             id: community.id,
             name: community.communityName,
-            iconUrl: community.iconUrl,
+            iconUrl: `${process.env.IMAGE_CDN_BASE_URL}${community.iconUrl}`,
             visibility: community.visibility,
             members: community.members,
             birthdate: community.createdAt,
@@ -161,7 +161,9 @@ exports.fetchCommunityMembers = async (req) => {
                     userId: '$userInfo._id',
                     name: '$userInfo.name',
                     username: '$userInfo.username',
-                    photoUrl: '$userInfo.photo'
+                    photoUrl: {
+                        $concat: [process.env.IMAGE_CDN_BASE_URL, '$userInfo.photo']
+                    },
                 }
             }
         ]);

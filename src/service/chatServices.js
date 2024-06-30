@@ -47,7 +47,9 @@ const aggregateCommunityMessagesByCommunityId = async (communityObjectId) => {
                     },
                     sender: {
                         name: '$userInfo.username',
-                        photoUrl: '$userInfo.photo'
+                        photoUrl: {
+                            $concat: [process.env.IMAGE_CDN_BASE_URL, '$userInfo.photo']
+                        }
                     },
                     time: {
                         $dateToString: {

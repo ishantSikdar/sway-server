@@ -9,7 +9,7 @@ exports.getAllSubjects = async (req) => {
         return {
             id: subject._id,
             name: subject.subject,
-            thumbnail: subject.thumbnail,
+            thumbnail: `${process.env.IMAGE_CDN_BASE_URL}${subject.thumbnail}`,
             desc: subject.description,
         }
     });
@@ -29,7 +29,7 @@ exports.getSubjectsByName = async (name) => {
     return subjects.map((subject) => ({
         id: subject._id,
         name: subject.subject,
-        thumbnail: subject.thumbnail,
+        thumbnail: `${process.env.IMAGE_CDN_BASE_URL}${subject.thumbnail}`,
         desc: subject.description,
     }));
 };
@@ -40,7 +40,7 @@ exports.getSubjectById = async (subjectId) => {
         _id: subject._id,
         name: subject.subject,
         description: subject.description,
-        thumbnailUrl: subject.thumbnail,
+        thumbnailUrl: `${process.env.IMAGE_CDN_BASE_URL}${subject.thumbnail}`,
         topics: subject.topics,
     };
 }

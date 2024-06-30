@@ -94,8 +94,8 @@ exports.getUserDetails = async (req) => {
     } else {
         return {
             username: user.username,
-            photoUrl: `${user.photo}?t=${new Date().getTime()}`,
-            bannerUrl: `${user.banner}?t=${new Date().getTime()}`,
+            photoUrl: `${process.env.IMAGE_CDN_BASE_URL}${user.photo}`,
+            bannerUrl: `${process.env.IMAGE_CDN_BASE_URL}${user.banner}`,
             name: user.name,
             email: user.email,
             mobile: user.mobile,

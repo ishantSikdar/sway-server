@@ -14,7 +14,7 @@ exports.uploadFileToS3 = async (path, file, fileName) => {
         
         if (uploadedEntity.$metadata.httpStatusCode === 200) {
             logger.info(`Uploaded File to S3 successfully\n  ->Filename: ${file.originalname}\n  ->Size: ${file.size}`)
-            return `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${entityKey}`;
+            return `/${entityKey}`;
         
         } else {
             logger.error(uploadedEntity);
@@ -22,7 +22,7 @@ exports.uploadFileToS3 = async (path, file, fileName) => {
         }
 
     } catch (error) {
-        logger.error(`Failed to upload file -> ${file.originalname} to S3, ${error.message}`);
+        logger.error(`Failed to upload file\n  ->${file.originalname} to S3, ${error.message}`);
         logger.error(error)
         throw error;
     }
