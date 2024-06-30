@@ -8,7 +8,6 @@ const { ObjectId } = require('mongodb');
 const { uploadFileToS3 } = require('../util/s3Util');
 const { ENTITY_USERS } = require('../constant/appConstants');
 const Community = require('../db/model/Community');
-const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.signUp = async (req) => {
     const jsonRequest = JSON.parse(JSON.parse(req.body.json));
@@ -81,7 +80,7 @@ exports.signIn = async (req) => {
         throw new Error('Invalid Username or Password');
     }
 
-    return jwt.sign({ userId: user._id }, JWT_SECRET);
+    return jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 }
 
 exports.getUserDetails = async (req) => {
@@ -94,8 +93,8 @@ exports.getUserDetails = async (req) => {
     } else {
         return {
             username: user.username,
-            photoUrl: `${process.env.IMAGE_CDN_BASE_URL}${user.photo}`,
-            bannerUrl: `${process.env.IMAGE_CDN_BASE_URL}${user.banner}`,
+            photoUrl: user.photo && `${process.env.IMAGE_CDN_BASE_URL}${user.photo}`,
+            bannerUrl: user.banner && `${process.env.IMAGE_CDN_BASE_URL}${user.banner}`,
             name: user.name,
             email: user.email,
             mobile: user.mobile,
