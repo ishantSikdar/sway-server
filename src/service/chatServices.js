@@ -62,7 +62,7 @@ const aggregateCommunityMessagesByCommunityId = async (communityObjectId) => {
                 }
             },
             {
-                $sort: { time: 1 }
+                $sort: { timestamp: 1 }
             },
  
         ]);
