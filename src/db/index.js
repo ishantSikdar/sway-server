@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const { logger } = require("../config/logger");
 
-const DATABASE = process.env.DATABASE || 'sway';
-const USERNAME = process.env.USER;
-const PASSWORD = process.env.PASSWORD;
-const HOSTNAME = process.env.HOSTNAME;
+const DATABASE = process.env.DB_DATABASE || 'sway';
+const USERNAME = process.env.DB_USER;
+const PASSWORD = process.env.DB_PASSWORD;
+const HOSTNAME = process.env.DB_HOSTNAME;
 
 mongoose
     .connect(`mongodb+srv://${USERNAME}:${PASSWORD}@${HOSTNAME}/${DATABASE}`)
