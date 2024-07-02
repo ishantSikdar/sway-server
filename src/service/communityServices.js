@@ -205,3 +205,23 @@ exports.fetchPublicCommunities = async (req) => {
         throw error;
     }
 }
+
+exports.joinCommunityByExplore = async (req) => {
+    try {
+        const communityId = ObjectId.createFromHexString(req.query.communityId);
+        const communityToJoin = await Community.findById(communityId);
+
+        if (!communityToJoin) {
+            req.status = 404;
+            throw new Error('Community Not Found'); 
+        }
+
+        communityToJoin.members.push(req.userId);
+        await communityToJoin.save();
+        logger.info(`User ${req.userId} has joined ${communityId} by exploring`);
+
+    } catch(error) {
+        logger.error('Cant Join Community', error);
+        throw error;
+    }
+}

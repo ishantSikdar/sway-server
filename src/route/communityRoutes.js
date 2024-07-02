@@ -8,7 +8,8 @@ const { API_URI_CREATE_COMMUNITY,
     API_URI_GET_COMMUNITY_DETAILS,
     API_URI_GET_COMMUNITY_CHATS,
     API_URI_GET_COMMUNITY_MEMBERS,
-    API_URI_GET_PUBLIC_COMMUNITIES
+    API_URI_GET_PUBLIC_COMMUNITIES,
+    API_URI_JOIN_COMMUNITY_EXPLORE
 } = require('../constant/endpoints');
 const { createCommunityRoute,
     joinCommunityRoute,
@@ -17,13 +18,15 @@ const { createCommunityRoute,
     getJoinedCommunitiesRoute,
     getCommunityChatsByIdRoute,
     getCommunityMembersRoute,
-    getPublicCommunitiesRoute
+    getPublicCommunitiesRoute,
+    joinCommunityByExploreRoute
 } = require('../controller/communityController');
 
 const router = Router();
 
 router.post(API_URI_CREATE_COMMUNITY, userAuthMiddleware, multerUpload.single('image'), createCommunityRoute);
 router.patch(API_URI_JOIN_COMMUNITY, userAuthMiddleware, joinCommunityRoute);
+router.patch(API_URI_JOIN_COMMUNITY_EXPLORE, userAuthMiddleware, joinCommunityByExploreRoute);
 router.get(API_URI_GET_INVITATION_CODE, userAuthMiddleware, generateInvitationCodeRoute);
 router.get(API_URI_GET_JOINED_COMMUNITIES, userAuthMiddleware, getJoinedCommunitiesRoute);
 router.get(API_URI_GET_COMMUNITY_DETAILS, userAuthMiddleware, getCommunityDetailsRoute);
