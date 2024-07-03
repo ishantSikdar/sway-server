@@ -119,7 +119,7 @@ exports.fetchCommunityDetails = async (req) => {
             visibility: community.visibility,
             members: community.members,
             birthdate: community.createdAt,
-            isAdmin: community.members.includes(userId),
+            isAdmin: community.members[0] == userId,
         }
 
     } catch (error) {
