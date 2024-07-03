@@ -6,7 +6,6 @@ const { generateRandomCode } = require("../util/randomUtil");
 const { uploadFileToS3 } = require("../util/s3Util");
 const { ENTITY_COMMUNITIES } = require("../constant/appConstants");
 const { USER } = require("../constant/dbContants");
-const mongoose = require("mongoose");
 
 exports.createCommunity = async (req) => {
     const newCommunityRequest = JSON.parse(JSON.parse(req.body.json));
@@ -106,6 +105,7 @@ exports.fetchAllJoinedCommunities = async (req) => {
 exports.fetchCommunityDetails = async (req) => {
     try {
         const community = await Community.findById(req.query.communityId);
+        const userId = ObjectId.createFromHexString(req.userId);
 
         if (!community) {
             req.status = 404;
@@ -119,6 +119,7 @@ exports.fetchCommunityDetails = async (req) => {
             visibility: community.visibility,
             members: community.members,
             birthdate: community.createdAt,
+            isAdmin: community.members.includes(userId),
         }
 
     } catch (error) {
@@ -200,7 +201,7 @@ exports.fetchPublicCommunities = async (req) => {
             }
         });
 
-    } catch(error) {
+    } catch (error) {
         logger.error('Cant fetch public communities', error);
         throw error;
     }
@@ -213,15 +214,50 @@ exports.joinCommunityByExplore = async (req) => {
 
         if (!communityToJoin) {
             req.status = 404;
-            throw new Error('Community Not Found'); 
+            throw new Error('Community Not Found');
         }
 
         communityToJoin.members.push(req.userId);
         await communityToJoin.save();
         logger.info(`User ${req.userId} has joined ${communityId} by exploring`);
 
-    } catch(error) {
+    } catch (error) {
         logger.error('Cant Join Community', error);
+        throw error;
+    }
+}
+
+exports.editCommunityByCommunityId = async (req) => {
+    try {
+        const userId = ObjectId.createFromHexString(req.userId);
+        const editCommunityRequest = JSON.parse(JSON.parse(req.body.json));
+
+        const existingCommunity = await Community.findById(editCommunityRequest.communityId);
+
+        if (!existingCommunity) {
+            req.status = 404;
+            throw new Error('Community Not Found');
+        }
+
+        if (!existingCommunity.members.includes(userId)) {
+            req.status = 401;
+            throw new Error('User is not an admin');
+        }
+
+        let imageUrl;
+        if (req.file) {
+            imageUrl = await uploadFileToS3(`${ENTITY_COMMUNITIES}/${existingCommunity._id.toHexString()}`, req.file, 'groupIcon.png');
+        }
+
+        existingCommunity.communityName = editCommunityRequest.name ? editCommunityRequest.name : existingCommunity.communityName;
+        existingCommunity.iconUrl = imageUrl ? imageUrl : existingCommunity.iconUrl;
+        existingCommunity.visibility = editCommunityRequest.visibility;
+
+        const communitySaved = await existingCommunity.save();
+        logger.info(`Community ${communitySaved._id} edited by ${req.userId}`);
+
+    } catch (error) {
+        logger.error('Cant Edit Community', error);
         throw error;
     }
 }

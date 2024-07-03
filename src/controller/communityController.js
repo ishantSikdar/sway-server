@@ -1,4 +1,4 @@
-const { createCommunity, joinCommunity, generateInviteCode, fetchAllJoinedCommunities, fetchCommunityDetails, fetchCommunityMembers, fetchPublicCommunities, joinCommunityByExplore } = require("../service/communityServices");
+const { createCommunity, joinCommunity, generateInviteCode, fetchAllJoinedCommunities, fetchCommunityDetails, fetchCommunityMembers, fetchPublicCommunities, joinCommunityByExplore, editCommunityByCommunityId } = require("../service/communityServices");
 const { ApiResponse } = require("../classes/ApiResponse");
 const { logger } = require("../config/logger");
 const { API_REQ_LOG } = require("../constant/logConstants");
@@ -14,6 +14,34 @@ exports.createCommunityRoute = async (req, res) => {
     } catch (error) {
         const cause = `Failed to create community: ${error.message}`;
         const apiResponse = new ApiResponse(`Failed to create community`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+    }
+}
+
+exports.editCommunityByIdRoute = async (req, res) => {
+    try {
+        await editCommunityByCommunityId(req);
+        const apiResponse = new ApiResponse(`Community Edited`);
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, apiResponse.message, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch (error) {
+        const cause = `Failed to edit community, ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`Community Not Found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        if (req.status === 403) {
+            const apiResponse = new ApiResponse(`User is not an admin`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Failed to edit community`);
         logger.info(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
         return res.status(500).json(apiResponse);
     }
