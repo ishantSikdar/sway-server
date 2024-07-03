@@ -60,12 +60,12 @@ exports.sendMessageToClients = async (messageData, user, community, clients, sen
             createdAt: messageTime
         });
 
+        messageToBeSaved.save();
         clients.forEach(async (metadata, clientSocket) => {
             if (metadata.communityId === senderSocket.communityId &&
                 (senderSocket.isPrivate ? community.members.includes(ObjectId.createFromHexString(senderSocket.userId)) : true)
                 && clientSocket.readyState === WebSocket.OPEN
             ) {
-                await messageToBeSaved.save();
                 clientSocket.send(
                     JSON.stringify({
                         msgGroupId: new ObjectId(),
