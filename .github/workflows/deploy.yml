@@ -37,6 +37,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
+          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker pull easc01/sway-server:latest
           sudo docker stop sway-server || true
           sudo docker rm sway-server || true
