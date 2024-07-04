@@ -38,8 +38,8 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_KEY }}
+          cd /home/ubuntu/sway-server
           sudo docker pull easc01/sway-server:latest
           sudo docker stop sway-server || true
           sudo docker rm sway-server || true
-          sudo docker run -d --name sway-server -p 3000:3000 easc01/sway-server:latest
-
+          sudo docker run -d --env-file .env --name sway-server -p 3000:3000 easc01/sway-server:latest
