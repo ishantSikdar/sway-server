@@ -42,5 +42,4 @@ jobs:
           sudo docker pull easc01/sway-server:latest
           sudo docker stop sway-server || true
           sudo docker rm sway-server || true
-          sudo docker rmi easc01/sway-server:latest || true
-          sudo docker run -d --env-file .env --restart --name sway-server -p 3000:3000 easc01/sway-server:latest
+          sudo docker run -d --env-file .env --restart=unless-stopped --name sway-server -p 3000:3000 easc01/sway-server:latest
