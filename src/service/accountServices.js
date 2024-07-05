@@ -175,3 +175,21 @@ exports.editBannerPicture = async (req) => {
         logger.info(`Update profile pic of user ${req.userId}`);
     }
 }
+
+exports.getPublicUserDetails = async (req) => {
+    const user = await User.findById(req.query.userId);
+
+    if (!user) {
+        req.status = 404;
+        throw new Error('User not found');
+    }
+
+    return {
+        name: user.name,
+        username: user.username,
+        photoUrl: user.photo && `${process.env.IMAGE_CDN_BASE_URL}${user.photo}`,
+        bannerUrl: user.banner && `${process.env.IMAGE_CDN_BASE_URL}${user.banner}`,
+        shorts: user.shorts,
+        joined: formatDateToEng(user.createdAt),
+    }
+}

@@ -19,6 +19,7 @@ module.exports = {
 
     // User
     API_URI_USER_DETAILS: "/userDetails",
+    API_URI_PUBLIC_USER_DETAILS: "/publicUserDetails",
     API_URI_USER_PHOTO: "/editUserProfilePic",
     API_URI_USER_BANNER: "/editUserBannerPic",
 

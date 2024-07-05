@@ -1,5 +1,5 @@
 const mongoose = require("../index");
-const { COURSE, USER } = require("../../constant/dbContants");
+const { COURSE, USER, SHORTS } = require("../../constant/dbContants");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -52,6 +52,10 @@ const userSchema = new mongoose.Schema({
             breaks: Number,
         }
     },
+    shorts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: SHORTS,
+    }],
     lastLoginAt: {
         type: Date,
         required: false,

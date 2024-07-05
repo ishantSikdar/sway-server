@@ -15,21 +15,11 @@ const shortsSchema = new mongoose.Schema({
         required: false,
     },
     media: {
-        thumbnail: {
-            type: String,
-            required: false,
-        },
-        short: {
-            type: String,
-            required: true,
-        }
+        type: String,
+        required: true,
     },
     interactivity: {
         likes: {
-            type: Number,
-            default: 0,
-        },
-        dislikes: {
             type: Number,
             default: 0,
         },

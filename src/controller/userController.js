@@ -150,3 +150,26 @@ exports.editUserBannerPictureRoute = async (req, res) => {
 
     }
 }
+
+exports.getPublicUserDetailsRoute = async (req, res) => {
+    try {
+        const user = await accountServices.getPublicUserDetails(req);
+        const apiResponse = new ApiResponse(`User Details fetched`, { user });
+        logger.info(API_REQ_LOG(apiResponse.requestId, `SUCCESS`, `User details fetched`, req.url));
+        return res.status(200).json(apiResponse);
+
+    } catch (error) {
+        const cause = `Failed to get user details, ${req.userId}, Cause: ${error.message}`;
+
+        if (req.status === 404) {
+            const apiResponse = new ApiResponse(`User not found`);
+            logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+            return res.status(req.status).json(apiResponse);
+        }
+
+        const apiResponse = new ApiResponse(`Failed to get user details`);
+        logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
+        return res.status(500).json(apiResponse);
+
+    }
+}
