@@ -7,7 +7,6 @@ const { formatDateToEng } = require("../util/dateUtil");
 const { ObjectId } = require('mongodb');
 const { uploadFileToS3 } = require('../util/s3Util');
 const { ENTITY_USERS } = require('../constant/appConstants');
-const Community = require('../db/model/Community');
 
 exports.signUp = async (req) => {
     const jsonRequest = JSON.parse(JSON.parse(req.body.json));
@@ -35,8 +34,7 @@ exports.signUp = async (req) => {
     }
 
     const userId = new ObjectId();
-    const welcomeCommunity = await Community.findById(ObjectId.createFromHexString(process.env.DEFAULT_COMMUNITY_ID));
-    
+
     let profilePicUrl;
     if (req.file) {
         profilePicUrl = await uploadFileToS3(`${ENTITY_USERS}/${userId.toHexString()}`, req.file, 'profilePic.png');
@@ -51,9 +49,6 @@ exports.signUp = async (req) => {
         password: await bcrypt.hash(jsonRequest.password, 10),
         mobile: jsonRequest.mobile,
     });
-    
-    welcomeCommunity.members.push(userId);
-    welcomeCommunity.save();
 
     const user = await newUser.save();
     logger.info(`User ${user._id} Registered`);

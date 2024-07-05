@@ -35,7 +35,7 @@ exports.editCommunityByIdRoute = async (req, res) => {
             return res.status(req.status).json(apiResponse);
         }
 
-        if (req.status === 403) {
+        if (req.status === 401) {
             const apiResponse = new ApiResponse(`User is not an admin`);
             logger.error(API_REQ_LOG(apiResponse.requestId, `FAILED`, cause, req.url));
             return res.status(req.status).json(apiResponse);

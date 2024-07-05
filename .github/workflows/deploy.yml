@@ -24,10 +24,10 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: easc01/sway-server:latest  # Replace with your Docker Hub username and repository
+        tags: easc01/sway-server:latest  
 
     - name: Verify Pushed Image
-      run: docker pull easc01/sway-server:latest  # Replace with your Docker Hub username and repository
+      run: docker pull easc01/sway-server:latest  
 
 
     - name: Deploy to EC2

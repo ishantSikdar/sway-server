@@ -239,7 +239,8 @@ exports.editCommunityByCommunityId = async (req) => {
             throw new Error('Community Not Found');
         }
 
-        if (!existingCommunity.members.includes(userId)) {
+        console.log(existingCommunity.members[0].equals(userId));
+        if (!existingCommunity.members[0].equals(userId)) {
             req.status = 401;
             throw new Error('User is not an admin');
         }
@@ -257,6 +258,7 @@ exports.editCommunityByCommunityId = async (req) => {
         logger.info(`Community ${communitySaved._id} edited by ${req.userId}`);
 
     } catch (error) {
+                
         logger.error('Cant Edit Community', error);
         throw error;
     }
