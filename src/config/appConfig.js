@@ -52,7 +52,7 @@ exports.initializeApp = () => {
                 webSocketVersion: `${packageJson.dependencies.ws}`,
                 cors: allowedUrls,
                 serverConfiguration: {
-                    port: process.env.PORT || 'Default Port'
+                    port: process.env.SERVER_PORT || 'Default Port'
                 },
                 additionalDependencies: packageJson.dependencies,
                 logs: []

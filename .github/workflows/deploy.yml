@@ -1,4 +1,4 @@
-name: Build and Deploy to Docker Hub
+name: Build and Deploy
 
 on:
   push:
@@ -38,8 +38,25 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_KEY }}
-          cd /home/ubuntu/sway-server
           sudo docker pull easc01/sway-server:latest
+
           sudo docker stop sway-server || true
           sudo docker rm sway-server || true
-          sudo docker run -d --env-file .env --restart=unless-stopped --name sway-server -p 3000:3000 easc01/sway-server:latest
+
+          sudo docker run -d \
+            --name sway-server \
+            --restart=unless-stopped \
+            -p ${{ vars.SERVER_PORT }}:${{ vars.SERVER_PORT }} \
+            -e SERVER_PORT=${{ vars.SERVER_PORT }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e IMAGE_CDN_BASE_URL=${{ vars.IMAGE_CDN_BASE_URL }} \
+            -e DB_HOSTNAME=${{ secrets.DB_HOSTNAME }} \
+            -e DB_USER=${{ secrets.DB_USER }} \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e DB_DATABASE=${{ secrets.DB_DATABASE }} \
+            -e YT_KEY=${{ secrets.YT_KEY }} \
+            -e S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
+            -e AWS_REGION=${{ secrets.AWS_REGION }} \
+            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            easc01/sway-server:latest

@@ -3,7 +3,7 @@ require('dotenv').config();
 const { initializeApp } = require('./config/appConfig');
 const { WebSocket } = require('ws');
 const { establistChatConnection, sendMessageToClients } = require('./service/chatSocketServices');
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.SERVER_PORT || 3001;
 
 // Express Server
 const app = initializeApp();
