@@ -1,6 +1,6 @@
 const { YT_ROOT_URL: YT_BASE_URL } = require("../constant/endpoints");
 const Playlist = require("../db/model/Playlist");
-const YT_KEY = process.env.YT_API_KEY;
+const YT_KEY = process.env.YT_KEY;
 const axios = require('axios');
 
 exports.getAllSubjects = async (req) => {
