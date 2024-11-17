@@ -9,6 +9,11 @@ const { logger } = require('./logger');
 const packageJson = require('../../package.json');
 const { allowedUrls } = require('./corsConfig');
 
+const DATABASE = process.env.DB_DATABASE || 'sway';
+const USERNAME = process.env.DB_USER;
+const PASSWORD = process.env.DB_PASSWORD;
+const HOSTNAME = process.env.DB_HOSTNAME;
+
 exports.initializeApp = () => {
     const app = express();
 
@@ -24,6 +29,7 @@ exports.initializeApp = () => {
     app.get('/', async (req, res) => {
         try {
             const memoryUsage = process.memoryUsage();
+            const url = `mongodb+srv://${USERNAME}:${PASSWORD}@${HOSTNAME}/${DATABASE}`;
 
             const rssMemory = `${(memoryUsage.rss / (1024 * 1024)).toFixed(2)} MB`;
             const heapTotalMemory = `${(memoryUsage.heapTotal / (1024 * 1024)).toFixed(2)} MB`;
@@ -32,6 +38,7 @@ exports.initializeApp = () => {
 
             const serverStatus = {
                 status: 'running',
+                url,
                 uptime: `${process.uptime()} seconds`,
                 memoryUsage: {
                     rss: `${rssMemory}`,
