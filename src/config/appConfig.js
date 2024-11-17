@@ -8,11 +8,22 @@ const { ROOT_URI_USER, ROOT_URI_PLAYLIST, ROOT_URI_COMMUNITY } = require('../con
 const { logger } = require('./logger');
 const packageJson = require('../../package.json');
 const { allowedUrls } = require('./corsConfig');
+const mongoose = require('../db/')
 
-const DATABASE = process.env.DB_DATABASE || 'sway';
-const USERNAME = process.env.DB_USER;
-const PASSWORD = process.env.DB_PASSWORD;
-const HOSTNAME = process.env.DB_HOSTNAME;
+function getConnectionStatus() {
+    switch (mongoose.connection.readyState) {
+        case 0:
+            return "Disconnected";
+        case 1:
+            return "Connected";
+        case 2:
+            return "Connecting";
+        case 3:
+            return "Disconnecting";
+        default:
+            return "Unknown";
+    }
+}
 
 exports.initializeApp = () => {
     const app = express();
@@ -29,8 +40,6 @@ exports.initializeApp = () => {
     app.get('/', async (req, res) => {
         try {
             const memoryUsage = process.memoryUsage();
-            const url = `mongodb+srv://${USERNAME}:${PASSWORD}@${HOSTNAME}/${DATABASE}`;
-
             const rssMemory = `${(memoryUsage.rss / (1024 * 1024)).toFixed(2)} MB`;
             const heapTotalMemory = `${(memoryUsage.heapTotal / (1024 * 1024)).toFixed(2)} MB`;
             const heapUsedMemory = `${(memoryUsage.heapUsed / (1024 * 1024)).toFixed(2)} MB`;
@@ -38,7 +47,7 @@ exports.initializeApp = () => {
 
             const serverStatus = {
                 status: 'running',
-                url,
+                dbStatus: getConnectionStatus()
                 uptime: `${process.uptime()} seconds`,
                 memoryUsage: {
                     rss: `${rssMemory}`,
