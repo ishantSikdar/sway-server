@@ -15,7 +15,7 @@ exports.logger = winston.createLogger({
     transports: [
         new winston.transports.Console(),
         new DailyRotateFile({
-            filename: 'logs/sway-%DATE%.log',
+            filename: 'logs/mindo-%DATE%.log',
             datePattern: 'YYYY-MM-DD',
             maxSize: '20m',
             maxFiles: '14d'
