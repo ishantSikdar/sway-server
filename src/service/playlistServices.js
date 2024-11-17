@@ -25,21 +25,27 @@ exports.getSubjectDetails = async (req) => {
 
 
 exports.getSubjectsByName = async (name) => {
-    const subjects = await Playlist.aggregate([
-        {
-            $search: {
-                index: "subject_search",
-                text: {
-                    query: name,
-                    path: "subject",
-                    fuzzy: {
-                        maxEdits: 2,
-                        prefixLength: 1
+    const isSearchQuery = name && typeof name === 'string' && name.trim() !== '';
+
+    const query = isSearchQuery
+        ? [
+            {
+                $search: {
+                    index: "subject_search",
+                    text: {
+                        query: name,
+                        path: "subject",
+                        fuzzy: {
+                            maxEdits: 2,
+                            prefixLength: 1
+                        }
                     }
                 }
             }
-        }
-    ]);
+        ]
+        : [{ $match: {} }]; // Return all records if no valid name is provided
+
+    const subjects = await Playlist.aggregate(query);
 
     return subjects.map((subject) => ({
         id: subject._id,
@@ -49,6 +55,7 @@ exports.getSubjectsByName = async (name) => {
         ai: false
     }));
 };
+
 
 exports.getSubjectById = async (subjectId) => {
     const subject = await Playlist.findOne({ _id: subjectId });
