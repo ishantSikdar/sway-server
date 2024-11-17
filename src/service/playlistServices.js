@@ -23,14 +23,30 @@ exports.getSubjectDetails = async (req) => {
     return subjectDetails;
 }
 
+
 exports.getSubjectsByName = async (name) => {
-    const subjectRegex = new RegExp(name, 'i');
-    const subjects = await Playlist.find({ subject: subjectRegex });
+    const subjects = await Playlist.aggregate([
+        {
+            $search: {
+                index: "subject_search",
+                text: {
+                    query: name,
+                    path: "subject",
+                    fuzzy: {
+                        maxEdits: 2,
+                        prefixLength: 1
+                    }
+                }
+            }
+        }
+    ]);
+
     return subjects.map((subject) => ({
         id: subject._id,
         name: subject.subject,
         thumbnail: `${process.env.IMAGE_CDN_BASE_URL}${subject.thumbnail}`,
         desc: subject.description,
+        ai: false
     }));
 };
 
