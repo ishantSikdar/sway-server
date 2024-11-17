@@ -47,7 +47,7 @@ exports.initializeApp = () => {
 
             const serverStatus = {
                 status: 'running',
-                dbStatus: getConnectionStatus()
+                dbStatus: getConnectionStatus(),
                 uptime: `${process.uptime()} seconds`,
                 memoryUsage: {
                     rss: `${rssMemory}`,
