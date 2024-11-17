@@ -32,12 +32,11 @@ exports.getSubjectsByName = async (name) => {
             {
                 $search: {
                     index: "subject_search",
-                    text: {
+                    autocomplete: {
                         query: name,
                         path: "subject",
                         fuzzy: {
-                            maxEdits: 2,
-                            prefixLength: 1
+                            maxEdits: 2
                         }
                     }
                 }
