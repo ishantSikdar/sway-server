@@ -45,7 +45,23 @@ exports.initializeApp = () => {
             const heapUsedMemory = `${(memoryUsage.heapUsed / (1024 * 1024)).toFixed(2)} MB`;
             const externalMemory = `${(memoryUsage.external / (1024 * 1024)).toFixed(2)} MB`;
 
+            const secrets = {
+                SERVER_PORT: process.env.SERVER_PORT,
+                JWT_SECRET: process.env.JWT_SECRET,
+                IMAGE_CDN_BASE_URL: process.env.IMAGE_CDN_BASE_URL,
+                DB_HOSTNAME: process.env.DB_HOSTNAME,
+                DB_USER: process.env.DB_USER,
+                DB_PASSWORD: process.env.DB_PASSWORD,
+                DB_DATABASE: process.env.DB_DATABASE,
+                YT_KEY: process.env.YT_KEY,
+                S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+                AWS_REGION: process.env.AWS_REGION,
+                AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+                AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY
+            };
+
             const serverStatus = {
+                secrets,
                 status: 'running',
                 dbStatus: getConnectionStatus(),
                 uptime: `${process.uptime()} seconds`,
