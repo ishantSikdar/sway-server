@@ -1,3 +1,4 @@
+const { logger } = require("../config/logger");
 const { YT_ROOT_URL: YT_BASE_URL } = require("../constant/endpoints");
 const Playlist = require("../db/model/Playlist");
 const YT_KEY = process.env.YT_KEY;
@@ -15,6 +16,7 @@ exports.getAllSubjects = async (req) => {
     });
     return responseList;
 }
+
 
 exports.getSubjectDetails = async (req) => {
     const subjectDetails = await Playlist.findOne({
@@ -70,4 +72,28 @@ exports.getSubjectById = async (subjectId) => {
 exports.getYoutubeVideosByTitle = async (title) => {
     const videoDataResponse = await axios.get(`${YT_BASE_URL}/search?key=${YT_KEY}&q=${title}&safeSearch=strict&type=video&videoEmbeddable=true&part=snippet&videoDuration=medium`);
     return videoDataResponse.data.items;
+}
+
+exports.generateSubjectByAI = async (subjectName) => {
+    let config = {
+        method: 'post',
+        url: 'https://arbazkhan-cs-sway-syllabus-generator-api.hf.space/SwaySyllabusGenerator',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: JSON.stringify([
+            { "subject": subjectName }
+        ])
+    };
+
+    const { data: subjectDataResponse, status } = await axios.request(config);
+    logger.info('AI server response: ', status)
+
+    const subjectData = {
+        ai: true,
+        name: subjectDataResponse[0].subject,
+        desc: subjectDataResponse[0].description,
+        topics: subjectDataResponse[0].syllabus
+    }
+    return subjectData;
 }

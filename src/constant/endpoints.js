@@ -11,6 +11,7 @@ module.exports = {
     // Playlist
     API_URI_SUBJECTS: "/subjects",
     API_URI_SUBJECT: "/subject",
+    API_URI_SUBJECT_BY_AI: "/subjectByAI",
     API_URI_SUBJECT_TOPIC: "/subject/topicVideo",
 
     // Courses
