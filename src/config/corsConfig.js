@@ -1,6 +1,6 @@
 const allowedUrls = [
     "http://localhost:5173",
-    "https://sway.easc01.com",
+    "https://mindo.easc01.com",
 ];
 
 module.exports = {
